@@ -1,0 +1,25 @@
+server:
+  port: 8888
+  servlet:
+    context-path: /
+
+spring:
+  profiles:
+    active: dev
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+
+mybatis-plus:
+  mapper-locations: /mapper/**/*Mapper.xml
+  type-aliases-package: com.ls.entity.**.*
+  global-config:
+    id-type: 0
+    field-strategy: 1
+    db-column-underline: true
+    refresh-mapper: true
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

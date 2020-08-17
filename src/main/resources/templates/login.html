@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>舆情监控系统</title>
+    <!--确保适当的绘制和触屏缩放-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--title图标-->
+    <link rel="shortcut icon" href="/assets/image/1.ico" type="image/x-icon">
+
+    <link rel="stylesheet" media="screen" href="/assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/reset.css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/sweet/sweetalert.css"/>
+</head>
+<body>
+<div id="particles-js">
+    <div class="login">
+        <div class="login-top">
+            登录
+        </div>
+        <div class="login-center clearfix">
+            <div class="login-center-img"><img src="/assets/image/name.png"/></div>
+            <div class="login-center-input">
+                <input type="text" name="username" id="username" placeholder="请输入您的用户名" onfocus="this.placeholder=''" onblur="this.placeholder='请输入您的用户名'"/>
+                <div class="login-center-input-text">用户名</div>
+            </div>
+        </div>
+        <div class="login-center clearfix">
+            <div class="login-center-img"><img src="/assets/image/password.png"/></div>
+            <div class="login-center-input">
+                <input type="password" name="password" id="password" placeholder="请输入您的密码" onfocus="this.placeholder=''" onblur="this.placeholder='请输入您的密码'"/>
+                <div class="login-center-input-text">密码</div>
+            </div>
+        </div>
+        <div class="login-button">
+            登陆
+        </div>
+    </div>
+    <div class="sk-rotating-plane"></div>
+</div>
+</body>
+<!--引入jquery核心js-->
+<script src="/assets/js/jquery/jquery-3.5.1.min.js"></script>
+<script src="/assets/sweet/sweetalert-dev.js"></script>
+<script src="/assets/js/particles.min.js"></script>
+<script src="/assets/js/app.js"></script>
+<script type="text/javascript">
+
+    function hasClass(elem, cls) {
+        cls = cls || '';
+        if (cls.replace(/\s/g, '').length == 0) return false; //当cls没有参数时，返回false
+        return new RegExp(' ' + cls + ' ').test(' ' + elem.className + ' ');
+    }
+
+    function addClass(ele, cls) {
+        if (!hasClass(ele, cls)) {
+            ele.className = ele.className == '' ? cls : ele.className + ' ' + cls;
+        }
+    }
+
+    function removeClass(ele, cls) {
+        if (hasClass(ele, cls)) {
+            var newClass = ' ' + ele.className.replace(/[\t\r\n]/g, '') + ' ';
+            while (newClass.indexOf(' ' + cls + ' ') >= 0) {
+                newClass = newClass.replace(' ' + cls + ' ', ' ');
+            }
+            ele.className = newClass.replace(/^\s+|\s+$/g, '');
+        }
+    }
+    //
+    document.querySelector(".login-button").onclick = function(){
+        //判断用户名和密码信息
+        let username = $("#username").val();
+        let password = $("#password").val();
+        if(!username){
+            swal("请输入用户名！！！","","error")
+        }else if(!password){
+            swal("请输入密码！！！","","error")
+        } else{
+            addClass(document.querySelector(".login"), "active")
+            setTimeout(function(){
+                addClass(document.querySelector(".sk-rotating-plane"), "active")
+                document.querySelector(".login").style.display = "none"
+            },800);
+            setTimeout(function(){
+                removeClass(document.querySelector(".login"), "active")
+                removeClass(document.querySelector(".sk-rotating-plane"), "active")
+                document.querySelector(".login").style.display = "block"
+            },3000);
+            //发送请求到后台
+            submitLogin(username,password);
+        }
+    };
+    //获取输入的用户名和密码发送请求到后台
+    function submitLogin(username,password){
+        $.ajax({
+            url:"/login",
+            type:'POST',
+            data:{
+                username:username ,
+                password:password
+            },
+            dataType:"json",
+            success:function (res) {
+                if(res.success){
+                    // swal(res.msg,"","success");
+                    window.location.href="/admin/index";
+                }else{
+                    swal(res.msg,"","warning");
+                    $("#username").val("");
+                    $("#password").val("");
+                }
+            },
+            error:function (err) {
+                swal("网络异常！！！","","error")
+            }
+        })
+    };
+</script>
+</html>
