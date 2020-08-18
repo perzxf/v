@@ -21,6 +21,13 @@
     </properties>
 
     <dependencies>
+        <!-- 热加载 热部署 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
         <!-- web支持 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -109,6 +116,11 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <executable>true</executable>
+                    <!--fork :  如果没有该项配置，devtools不会起作用，即应用不会restart加载器-->
+                    <fork>true</fork>
+                </configuration>
             </plugin>
         </plugins>
     </build>
