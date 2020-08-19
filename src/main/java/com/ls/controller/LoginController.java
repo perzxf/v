@@ -33,6 +33,11 @@ public class LoginController {
         return "login";
     }
 
+    @GetMapping("/")
+    public String login(){
+        return "login";
+    }
+
     /**
      * 接收登录信息，验证登录信息，返回结果
      * @param username
@@ -77,4 +82,14 @@ public class LoginController {
         return map;
     }
 
+
+    /**
+     * 安全退出
+     * @return
+     */
+    @GetMapping("/exitLogin")
+    public String exitLogin(){
+        SecurityUtils.getSubject().logout();
+        return "redirect:login.html";
+    }
 }

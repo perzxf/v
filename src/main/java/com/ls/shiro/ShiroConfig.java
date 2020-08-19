@@ -58,21 +58,10 @@ public class ShiroConfig {
 
         map.put("/","anon");  //根目录
         map.put("/assets/**","anon");   //资源文件
-//        map.put("/ueditor/**","anon");
-//        map.put("/upload/**","anon");
-//        map.put("/user/register.html","anon");  //注册页面
-//        map.put("/user/login.html","anon");   //登录页面
-//        map.put("/user/findPassword.html","anon");  //
-//        map.put("/user/register","anon");   //注册方法
-//        map.put("/user/login","anon");     //登录方法
-//        map.put("/user/sendEmail","anon");
-//        map.put("/user/checkYzm","anon");
-//
-//        map.put("/admin/login.html","anon"); //后台登录页面
-//        map.put("/admin/default.html","anon"); //后台首页页面
+
 
         // 设置退出登陆，配置退出过滤器，其中的具体的退出代码Shiro已经帮我们实现了
-        map.put("/user/logout", "logout");
+        map.put("/exitLogin", "logout");
         // 对所有用户认证
         map.put("/**", "authc");
 

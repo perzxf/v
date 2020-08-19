@@ -37,8 +37,6 @@ public interface SysUserService extends IService<SysUser> {
      */
     Integer getCount(SysUser user);
 
-    /**
-     * 修改用户密码
-     */
-    void updateByPassword(Long userId, String password);
+
+    void updateByUser(SysUser oldUser);
 }

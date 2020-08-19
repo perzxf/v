@@ -10,6 +10,7 @@ import com.ls.mapper.system.SysUserMapper;
 import com.ls.service.system.SysUserService;
 import com.ls.utils.Md5Util;
 import com.ls.utils.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -117,11 +118,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return count;
     }
 
+
     @Override
-    public void updateByPassword(Long userId, String password) {
-        SysUser user = new SysUser();
-        user.setUserId(userId);
-        user.setPassword(password);
-//        baseMapper.updateByPassword(user);
+    public void updateByUser(SysUser user) {
+        Wrapper<SysUser> wrapper = new EntityWrapper<>();
+        if(StringUtils.isNotBlank(user.getUserId().toString())){
+            wrapper.eq("user_id", user.getUserId());
+        }
+        baseMapper.update(user, wrapper);
     }
 }

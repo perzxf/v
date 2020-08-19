@@ -1,0 +1,131 @@
+<style>
+    th{
+        text-align: center;
+    }
+</style>
+<!--页面中心内容-->
+<div class="col-sm-10">
+    <!--页头-->
+    <div class="page-header" style="margin-top: -20px;margin-bottom: 5px">
+        <h1>用户管理</h1>
+    </div>
+    <!--标签页组件-->
+    <div>
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">用户列表</a></li>
+            <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">用户添加</a></li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="home">
+                <div class="panel panel-default">
+                    <div class="panel-body text-center">
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label for="nickName">昵称</label>
+                                <input type="text" class="form-control" id="nickName" placeholder="请输入昵称">
+                            </div>
+                            <div class="form-group">
+                                <label for="userName">用户名</label>
+                                <input type="text" class="form-control" id="userName" placeholder="请输入用户名">
+                            </div>
+                            <button type="submit" class="btn btn-primary">搜索</button>
+                        </form>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <table id="userList"></table>
+                            <div id="pager"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="profile">用来处理用户添加</div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        //初始化表格
+        userListLoad();
+
+    });
+
+    function userListLoad() {
+        $("#userList").jqGrid({
+            styleUI: "Bootstrap",   //用来指定jqgrid的主题样式 固定写死必须是Bootstrap
+            url: "/user/findAll",    //用来远程获取数据地址  json格式类型 [{"id":"1","name":"张三"},{}]
+            datatype: "JSON",   //用来指定服务返回的数据类型  默认是:xml 修改为:json
+            autowidth: true,    //自适应父容器
+            caption: "用户列表",    //用来指定表格的标题
+            hidegrid: false,    //用来控制在使用标题情况下是否显示折叠按钮
+            height:500,     //指定高度
+            colNames: ["编号", "昵称", "用户名", "手机号", "邮箱", "公司名称","注册时间","有效开始时间","有效结束时间","备注","操作"],    //用来指定表格中标题列的名称  colNames 和 colModel 必须成对出现  长度一致
+            colModel: [
+                {name: "userId", align: "center", editable: true, hidden: true,search:false},
+                {name: "nickName", align: "center", editable: true},
+                {name: "userName", align: "center", editable: true,search:false},
+                {name: "cellPhone", align: "center", editable: true},
+                {name: "email", align: "center", editable: true},
+                {name: "company", align: "center", editable: true},
+                {name: "createDate", align: "center", editable: false,search:false},
+                {name: "startDate", align: "center", editable: false,search:false},
+                {name: "endDate", align: "center", editable: false,search:false},
+                {name: "remark", align: "center", editable: true,search:false},
+                {name:"caozuo",align:"center", editable: false,search:false,
+                    formatter:function(cellvalue, options, rowObject){
+                        //console.log(rowObject.userId);
+                        return '<a class="btn btn-danger" onclick="swalDelUser(\''+rowObject.userId+'\')">删除</a>'
+                    }}
+            ],
+            pager: "#pager",    //用来指定分页工具栏标签的id
+            rowNum: 10,  //用来指定每页显示记录数
+            rowList: [5, 10, 15, 20],  //用来指定下拉列表中每页显示条数
+            viewrecords: true , //用来显示总记录数
+        });
+    }
+
+
+
+    //删除弹框
+    function swalDelUser(userId) {
+        swal({
+                title: "确定删除吗？",
+                text: "删除后你将无法恢复该条信息！",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "确定删除！",
+                cancelButtonText: "取消删除！",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function(isConfirm){
+                if (isConfirm) {
+                    delUser(userId)
+                }else{
+                    swal("取消成功！", "","success");
+                }
+            });
+    }
+
+    //删除
+    function delUser(userId) {
+        $.ajax({
+            url:"/user/del",
+            type:'POST',
+            data:{
+                oper:"del" ,
+                userId:userId
+            },
+            dataType:"json",
+            success:function (res) {
+                if(res.success){
+                    swal("删除！", "你选择的信息已经被删除。","success");
+                }else{
+                    swal("删除失败！", "","error");
+                }
+            }
+        })
+    }
+
+</script>
