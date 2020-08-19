@@ -1,5 +1,8 @@
 package com.ls.service.monitor.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.ls.common.ConstantConfig;
 import com.ls.entity.monitor.MonitorItem;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class MonitorItemServiceImpl extends ServiceImpl<MonitorItemMapper, MonitorItem> implements MonitorItemService {
@@ -23,6 +27,34 @@ public class MonitorItemServiceImpl extends ServiceImpl<MonitorItemMapper, Monit
         item = createByMonitorItem(item,session);
         baseMapper.insert(item);
         log.info("保存的项目信息：{}",item.toString());
+    }
+
+    @Override
+    public List<MonitorItem> selectUserList(MonitorItem item, Integer page, Integer rows) {
+        //设置分页
+        Page<MonitorItem> userPage = new Page<>();
+        userPage.setCurrent(page);  //当前第几页
+        userPage.setSize(rows); //每页几条数据
+
+        //查询条件
+        Wrapper<MonitorItem> wrapper = new EntityWrapper<>();
+        wrapper.ge("monitor_id",1); //userId 大于等于1
+        if(item != null){
+            wrapper.like("monitor_name", item.getMonitorName()); // 模糊查询
+        }
+        wrapper.orderBy("create_date", false); // 按照创建时间倒序排序
+
+        List<MonitorItem> items = baseMapper.selectPage(userPage, wrapper);
+        log.info("当前第{}页,每页展示{}条数据",page,rows);
+        return items;
+    }
+
+    @Override
+    public Integer getCount(MonitorItem item) {
+        Wrapper<MonitorItem> wrapper = new EntityWrapper<>();
+        Integer count = baseMapper.selectCount(wrapper);
+        log.info("查询到用户信息一共{}条",count);
+        return count;
     }
 
     private MonitorItem createByMonitorItem(MonitorItem item, HttpSession session) {

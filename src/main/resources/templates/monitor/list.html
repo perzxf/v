@@ -11,6 +11,68 @@
     </div>
     <!--标签页组件-->
     <div>
-
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">项目列表</a></li>
+            <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">数据列表</a></li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="home">
+                <div class="panel panel-default">
+                    <div class="panel-body text-center">
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label for="nickName">项目名称</label>
+                                <input type="text" class="form-control" id="nickName" placeholder="请输入项目名称">
+                            </div>
+                            <button type="submit" class="btn btn-primary">搜索</button>
+                        </form>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <table id="itemList"></table>
+                            <div id="pager"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="profile">用来处理数据列表</div>
+        </div>
     </div>
 </div>
+<script>
+    $(function () {
+        //初始化表格
+        itemListLoad();
+
+    });
+    function itemListLoad() {
+        $("#itemList").jqGrid({
+            styleUI: "Bootstrap",   //用来指定jqgrid的主题样式 固定写死必须是Bootstrap
+            url: "/monitor/item/findAll",    //用来远程获取数据地址  json格式类型 [{"id":"1","name":"张三"},{}]
+            datatype: "JSON",   //用来指定服务返回的数据类型  默认是:xml 修改为:json
+            autowidth: true,    //自适应父容器
+            caption: "项目列表",    //用来指定表格的标题
+            hidegrid: false,    //用来控制在使用标题情况下是否显示折叠按钮
+            height:500,     //指定高度
+            colNames: ["编号", "项目名称", "关键词",  "备注", "创建时间","创建人","操作"],    //用来指定表格中标题列的名称  colNames 和 colModel 必须成对出现  长度一致
+            colModel: [
+                {name: "monitorId", align: "center", editable: true, hidden: true,search:false},
+                {name: "monitorName", align: "center", editable: true},
+                {name: "keywords", align: "center", editable: true},
+                {name: "remark", align: "center", editable: true},
+                {name: "createDate", align: "center", editable: true},
+                {name: "userId", align: "center", editable: true},
+                {name:"caozuo",align:"center", editable: false,search:false,
+                    formatter:function(cellvalue, options, rowObject){
+                        //console.log(rowObject.userId);
+                        return '<a class="btn btn-danger" onclick="swalDelUser(\''+rowObject.monitorId+'\')">删除</a>'
+                    }}
+            ],
+            pager: "#pager",    //用来指定分页工具栏标签的id
+            rowNum: 10,  //用来指定每页显示记录数
+            rowList: [5, 10, 15, 20],  //用来指定下拉列表中每页显示条数
+            viewrecords: true , //用来显示总记录数
+        });
+    }
+
+</script>
