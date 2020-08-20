@@ -1,5 +1,7 @@
 package com.ls.controller.monitor;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.ls.entity.monitor.MonitorItem;
 import com.ls.service.monitor.MonitorItemService;
 import com.ls.utils.StringUtil;
@@ -65,6 +67,17 @@ public class MonitorItemController {
         map.put("rows", lists);
         map.put("total", totalPage);
         map.put("records", totals);
+        return map;
+    }
+
+    @GetMapping("/item/listpark")
+    @ResponseBody
+    public Map<String, Object> listPark(){
+        Map<String, Object> map = new HashMap<>();
+        Wrapper<MonitorItem> wrapper = new EntityWrapper<>();
+        List<MonitorItem> items = itemService.selectList(wrapper);
+        map.put("data", items);
+        map.put("success", true);
         return map;
     }
 }

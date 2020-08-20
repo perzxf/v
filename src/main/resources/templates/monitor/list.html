@@ -35,7 +35,22 @@
                     </div>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-pane" id="profile">用来处理数据列表</div>
+            <div role="tabpanel" class="tab-pane" id="profile">
+                <div class="panel panel-default">
+                    <div class="panel-body text-center">
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label for="nickName">项目选择：</label>
+                                <select class="selectpicker" id="monitorId" name="monitorId" onchange="selectOnchang(this)"></select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="row">
+                        <table id="eventList"></table>
+                        <div id="eventPager"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -44,7 +59,49 @@
         //初始化表格
         itemListLoad();
 
+        $('.selectpicker').selectpicker({
+            noneSelectedText : '请选择'    //默认显示内容
+        });
+        //初始化刷新数据
+        $(window).on('load', function() {
+            $('.selectpicker').selectpicker('val', '');
+            $('.selectpicker').selectpicker('refresh');
+        });
+        loadParkdata();    //执行此函数，从后台获取数据，拼接成option标签，添加到select的里面
     });
+
+    function selectOnchang(obj) {
+        const monitorId = $('#monitorId').val();
+        eventListLoad(monitorId);
+        // alert(monitorId +":"+ name)
+    }
+
+    function loadParkdata(){
+        $.ajax({
+            url : "/monitor/item/listpark",    //后台controller中的请求路径
+            type : 'GET',
+            async : false,
+            datatype : 'json',
+            success : function(res) {
+                if(res.success){
+                    const data = res.data;
+                    const parknames = $("#monitorId");
+                    for(let i=0; i< data.length; i++ ){
+                        let parkdata = data[i];
+                        //拼接成多个<option><option/>
+                        parknames.append('<option value="'+parkdata.monitorId+'">'+parkdata.monitorName+'</option>')
+                    }
+                    $('.selectpicker').selectpicker('val', '');
+                    $('.selectpicker').selectpicker('refresh');
+                }
+            },
+            error : function() {
+                alert('查询名称出错');
+            }
+        });
+    }
+
+
     function itemListLoad() {
         $("#itemList").jqGrid({
             styleUI: "Bootstrap",   //用来指定jqgrid的主题样式 固定写死必须是Bootstrap
@@ -69,6 +126,44 @@
                     }}
             ],
             pager: "#pager",    //用来指定分页工具栏标签的id
+            rowNum: 10,  //用来指定每页显示记录数
+            rowList: [5, 10, 15, 20],  //用来指定下拉列表中每页显示条数
+            viewrecords: true , //用来显示总记录数
+        });
+    }
+
+
+    function eventListLoad(monitorId) {
+        $("#eventList").jqGrid('clearGridData');  //清空表格
+
+        $("#eventList").jqGrid({
+            styleUI: "Bootstrap",   //用来指定jqgrid的主题样式 固定写死必须是Bootstrap
+            url: "/monitor/event/findAll?monitorId="+monitorId,    //用来远程获取数据地址  json格式类型 [{"id":"1","name":"张三"},{}]
+            datatype: "JSON",   //用来指定服务返回的数据类型  默认是:xml 修改为:json
+            autowidth: true,    //自适应父容器
+            caption: "项目数据列表",    //用来指定表格的标题
+            hidegrid: false,    //用来控制在使用标题情况下是否显示折叠按钮
+            height:500,     //指定高度
+            colNames: ["编号", "标题", "事件发生时间",  "数据抓取时间", "是否加入简报","事件类型","是否预警","原文缓存"],    //用来指定表格中标题列的名称  colNames 和 colModel 必须成对出现  长度一致
+            colModel: [
+                {name: "eventId", align: "center", editable: true, hidden: true,search:false},
+                {name: "eventTitle", align: "center", editable: true},
+                {name: "eventDate", align: "center", editable: true},
+                {name: "createDate", align: "center", editable: true},
+                {name: "state", align: "center", editable: true},
+                {name: "eventType", align: "center", editable: true},
+                {name:"yujing",align:"center", editable: false,search:false,
+                    formatter:function(cellvalue, options, rowObject){
+                        //console.log(rowObject.userId);
+                        return '<a class="btn btn-danger" onclick="swalDelUser(\''+rowObject.monitorId+'\')">预警</a>'
+                    }},
+                {name:"caozuo",align:"center", editable: false,search:false,
+                    formatter:function(cellvalue, options, rowObject){
+                        //console.log(rowObject.userId);
+                        return '<a class="btn btn-danger" onclick="swalDelUser(\''+rowObject.monitorId+'\')">删除</a>'
+                    }}
+            ],
+            pager: "#eventPager",    //用来指定分页工具栏标签的id
             rowNum: 10,  //用来指定每页显示记录数
             rowList: [5, 10, 15, 20],  //用来指定下拉列表中每页显示条数
             viewrecords: true , //用来显示总记录数
