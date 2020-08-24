@@ -57,6 +57,14 @@ public class MonitorItemServiceImpl extends ServiceImpl<MonitorItemMapper, Monit
         return count;
     }
 
+    @Override
+    public MonitorItem getMonitorItemById(Long monitorId) {
+        MonitorItem item = new MonitorItem();
+        item.setMonitorId(monitorId);
+        MonitorItem monitorItem = baseMapper.selectOne(item);
+        return monitorItem;
+    }
+
     private MonitorItem createByMonitorItem(MonitorItem item, HttpSession session) {
         //创建时间
         Date date = new Date();

@@ -22,6 +22,31 @@ public class DateUtil {
         return sdf.parse(str);
     }
 
+    public static String timeStamp2Date(String seconds,String format) {
+        if(seconds == null || seconds.isEmpty() || seconds.equals("null")){
+            return "";
+        }
+        if(format == null || format.isEmpty()){
+            format = "yyyy-MM-dd HH:mm:ss";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(new Date(Long.valueOf(seconds+"000")));
+    }
+
+    public static void main(String[] args) throws ParseException {
+        String timeStamp = "1495710137";
+        String date = timeStamp2Date(timeStamp, "yyyy-MM-dd HH:mm:ss");
+        Date date1 = formatString(date, "yyyy-MM-dd HH:mm:ss");
+        System.out.println(date1);
+    }
+
+
+    public static Date formatTimeStampToDate(String timeStamp,String format) throws ParseException {
+        String date = timeStamp2Date(timeStamp, "yyyy-MM-dd HH:mm:ss");
+        return formatString(date, "yyyy-MM-dd HH:mm:ss");
+    }
+
+
     /**
      * 日期对象转字符串
      */

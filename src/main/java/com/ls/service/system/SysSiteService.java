@@ -11,4 +11,5 @@ public interface SysSiteService extends IService<SysSite> {
 
     Integer getCount(SysSite sysSite);
 
+    List<SysSite> getSiteList();
 }

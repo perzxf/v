@@ -55,7 +55,7 @@ public class ShiroConfig {
          * anon  -->所有的url都可以匿名访问
          */
         //配置不会被拦截的链接  顺序判断
-
+        map.put("/spider/**","anon");
         map.put("/","anon");  //根目录
         map.put("/assets/**","anon");   //资源文件
 

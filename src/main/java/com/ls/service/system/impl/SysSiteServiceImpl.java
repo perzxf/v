@@ -46,4 +46,10 @@ public class SysSiteServiceImpl extends ServiceImpl<SysSiteMapper, SysSite> impl
         return count;
     }
 
+    @Override
+    public List<SysSite> getSiteList() {
+        Wrapper<SysSite> wrapper = new EntityWrapper<>();
+        return baseMapper.selectList(wrapper);
+    }
+
 }

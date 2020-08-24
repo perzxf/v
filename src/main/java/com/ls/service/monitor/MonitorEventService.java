@@ -10,4 +10,6 @@ public interface MonitorEventService extends IService<MonitorEvent> {
     List<MonitorEvent> selectEventList(MonitorEvent monitorEvent, Integer page, Integer rows);
 
     Integer getCount(MonitorEvent monitorEvent);
+
+    void saveEvent(List<MonitorEvent> events);
 }

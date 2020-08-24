@@ -19,9 +19,15 @@ public class MonitorEvent {
     private String  eventTitle;
 
     /**
-     * 事件链接
+     * 事件链接（原文链接）
      */
     private String  eventUrl;
+
+    /**
+     * 事件数据来源类型ID
+     */
+    private Long siteTypeId;
+
 
     /**
      * 事件发生时间
@@ -43,12 +49,12 @@ public class MonitorEvent {
     private Date createDate;
 
     /**
-     * 处理状态
+     * 处理状态（0：未加入简报，1：已经加入简报 ）
      */
     private Integer state;
 
     /**
-     * 事件类型
+     * 事件类型（-1：负面，0：中性，1：正面）
      */
     private Integer eventType;
 
@@ -128,5 +134,31 @@ public class MonitorEvent {
 
     public void setMonitorId(Long monitorId) {
         this.monitorId = monitorId;
+    }
+
+    public Long getSiteTypeId() {
+        return siteTypeId;
+    }
+
+    public void setSiteTypeId(Long siteTypeId) {
+        this.siteTypeId = siteTypeId;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "MonitorEvent{" +
+                "eventId=" + eventId +
+                ", eventTitle='" + eventTitle + '\'' +
+                ", eventUrl='" + eventUrl + '\'' +
+                ", siteTypeId=" + siteTypeId +
+                ", eventDate=" + eventDate +
+                ", eventContent='" + eventContent + '\'' +
+                ", createDate=" + createDate +
+                ", state=" + state +
+                ", eventType=" + eventType +
+                ", monitorId=" + monitorId +
+                '}';
     }
 }

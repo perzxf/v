@@ -1,9 +1,11 @@
 package com.ls.service.monitor.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.ls.entity.monitor.MonitorEvent;
 import com.ls.mapper.monitor.MonitorEventMapper;
 import com.ls.service.monitor.MonitorEventService;
@@ -11,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -47,5 +50,34 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
         Integer count = baseMapper.selectCount(wrapper);
         log.info("查询到用户信息一共{}条",count);
         return count;
+    }
+
+    @Override
+    public void saveEvent(List<MonitorEvent> events) {
+        for (MonitorEvent event:events){
+            String link = "https://weixin.sogou.com"+event.getEventUrl();
+            //判断记录是否已存在
+            List<MonitorEvent> weChatList = selectWeChatInfo(event);
+            if (CollUtil.isEmpty(weChatList)) {
+                //把url放到任务队列中
+                event.setEventUrl(link);
+                event.setCreateDate(new Date());
+                baseMapper.insert(event);
+                log.info("保存的信息：{}",event.toString());
+            } else {
+                log.info("记录已存在,记录title:{}",event.getEventTitle());
+            }
+        }
+    }
+
+    private List<MonitorEvent> selectWeChatInfo(MonitorEvent event) {
+        Wrapper<MonitorEvent> wrapper = new EntityWrapper<>();
+        if(StringUtils.isNotEmpty(event.getEventTitle())){
+            wrapper.eq("event_title",event.getEventTitle());
+        }
+        if(event.getEventDate() != null){
+            wrapper.eq("event_date",event.getEventDate());
+        }
+        return baseMapper.selectList(wrapper);
     }
 }

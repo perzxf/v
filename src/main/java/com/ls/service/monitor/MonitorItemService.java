@@ -13,4 +13,6 @@ public interface MonitorItemService extends IService<MonitorItem> {
     List<MonitorItem> selectUserList(MonitorItem item, Integer page, Integer rows);
 
     Integer getCount(MonitorItem item);
+
+    MonitorItem getMonitorItemById(Long monitorId);
 }
