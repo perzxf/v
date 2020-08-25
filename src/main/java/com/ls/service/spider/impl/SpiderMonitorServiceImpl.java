@@ -34,11 +34,11 @@ public class SpiderMonitorServiceImpl implements SpiderMonitorService {
                     System.out.println("微博");
                     break;
                 case 2:
-                    System.out.println("贴吧");
+                    System.out.println("百度贴吧");
                     getTieBaInfo(siteUrl,key);
                     break;
                 case 3:
-                    System.out.println("论坛");
+                    System.out.println("天涯论坛");
                     getTianYaInfo(siteUrl,key);
                     break;
                 case 4:
@@ -46,18 +46,18 @@ public class SpiderMonitorServiceImpl implements SpiderMonitorService {
                     getSinaNewsInfo(siteUrl,key);
                     break;
                 case 5:
-                    System.out.println("微信公众号");
+                    System.out.println("搜狗微信公众号");
                     getWeChatInfo(siteUrl,key);
                     break;
                 case 6:
                     System.out.println("博客");
                     break;
                 case 7:
-                    System.out.println("知乎");
+                    System.out.println("搜狗知乎");
                     getZhiHuInfo(siteUrl,key);
                     break;
                 case 8:
-                    System.out.println("搜狐新闻");
+                    System.out.println("搜狗新闻");
                     getSouHuNewsInfo(siteUrl,key);
                     break;
             }
