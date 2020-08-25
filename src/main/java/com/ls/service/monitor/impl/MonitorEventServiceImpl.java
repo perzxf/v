@@ -53,15 +53,18 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
     }
 
     @Override
-    public void saveEvent(List<MonitorEvent> events) {
+    public void saveWeChatEvent(List<MonitorEvent> events) {
         for (MonitorEvent event:events){
+            event.setSiteTypeId(5l); //网站数据类型
             String link = "https://weixin.sogou.com"+event.getEventUrl();
             //判断记录是否已存在
-            List<MonitorEvent> weChatList = selectWeChatInfo(event);
-            if (CollUtil.isEmpty(weChatList)) {
+            List<MonitorEvent> list = selectInfo(event);
+            if (CollUtil.isEmpty(list)) {
                 //把url放到任务队列中
                 event.setEventUrl(link);
                 event.setCreateDate(new Date());
+                event.setState(0);
+                event.setEventType(0);
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
             } else {
@@ -70,10 +73,118 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
         }
     }
 
-    private List<MonitorEvent> selectWeChatInfo(MonitorEvent event) {
+    @Override
+    public void saveSouHuNewsEvent(List<MonitorEvent> events) {
+        for (MonitorEvent event:events){
+            event.setSiteTypeId(8l); //网站数据类型
+            String link = "https://www.sogou.com"+event.getEventUrl();
+            //判断记录是否已存在
+            List<MonitorEvent> list = selectInfo(event);
+            if (CollUtil.isEmpty(list)) {
+                //把url放到任务队列中
+                event.setEventUrl(link);
+                event.setCreateDate(new Date());
+                event.setState(0);
+                event.setEventType(0);
+                baseMapper.insert(event);
+                log.info("保存的信息：{}",event.toString());
+            } else {
+                log.info("记录已存在,记录title:{}",event.getEventTitle());
+            }
+        }
+    }
+
+    @Override
+    public void saveZhiHuEvent(List<MonitorEvent> events) {
+        for (MonitorEvent event:events){
+            event.setSiteTypeId(7l); //网站数据类型
+            String link = "https://www.sogou.com"+event.getEventUrl();
+            //判断记录是否已存在
+            List<MonitorEvent> list = selectInfo(event);
+            if (CollUtil.isEmpty(list)) {
+                //把url放到任务队列中
+                event.setEventUrl(link);
+                event.setCreateDate(new Date());
+                event.setState(0);
+                event.setEventType(0);
+                baseMapper.insert(event);
+                log.info("保存的信息：{}",event.toString());
+            } else {
+                log.info("记录已存在,记录title:{}",event.getEventTitle());
+            }
+        }
+    }
+
+    @Override
+    public void saveTieBaEvent(List<MonitorEvent> events) {
+        for (MonitorEvent event:events){
+            event.setSiteTypeId(2l); //网站数据类型
+            String link = "https://tieba.baidu.com"+event.getEventUrl();
+            //判断记录是否已存在
+            List<MonitorEvent> list = selectInfo(event);
+            if (CollUtil.isEmpty(list)) {
+                //把url放到任务队列中
+                event.setEventUrl(link);
+                event.setCreateDate(new Date());
+                event.setState(0);
+                event.setEventType(0);
+                baseMapper.insert(event);
+                log.info("保存的信息：{}",event.toString());
+            } else {
+                log.info("记录已存在,记录title:{}",event.getEventTitle());
+            }
+        }
+    }
+
+    @Override
+    public void saveTianYaEvent(List<MonitorEvent> events) {
+        for (MonitorEvent event:events){
+            event.setSiteTypeId(3l); //网站数据类型
+//            String link = "https://tieba.baidu.com"+event.getEventUrl();
+            //判断记录是否已存在
+            List<MonitorEvent> list = selectInfo(event);
+            if (CollUtil.isEmpty(list)) {
+                //把url放到任务队列中
+//                event.setEventUrl(link);
+                event.setCreateDate(new Date());
+                event.setState(0);
+                event.setEventType(0);
+                baseMapper.insert(event);
+                log.info("保存的信息：{}",event.toString());
+            } else {
+                log.info("记录已存在,记录title:{}",event.getEventTitle());
+            }
+        }
+    }
+
+    @Override
+    public void saveSinaNewsEvent(List<MonitorEvent> events) {
+        for (MonitorEvent event:events){
+            event.setSiteTypeId(4l); //网站数据类型
+//            String link = "https://tieba.baidu.com"+event.getEventUrl();
+            //判断记录是否已存在
+            List<MonitorEvent> list = selectInfo(event);
+            if (CollUtil.isEmpty(list)) {
+                //把url放到任务队列中
+//                event.setEventUrl(link);
+                event.setCreateDate(new Date());
+                event.setState(0);
+                event.setEventType(0);
+                baseMapper.insert(event);
+                log.info("保存的信息：{}",event.toString());
+            } else {
+                log.info("记录已存在,记录title:{}",event.getEventTitle());
+            }
+        }
+    }
+
+    private List<MonitorEvent> selectInfo(MonitorEvent event) {
         Wrapper<MonitorEvent> wrapper = new EntityWrapper<>();
         if(StringUtils.isNotEmpty(event.getEventTitle())){
             wrapper.eq("event_title",event.getEventTitle());
+        }
+        if(event.getSiteTypeId() != null){
+            wrapper.eq("site_type_id",event.getSiteTypeId());
         }
         if(event.getEventDate() != null){
             wrapper.eq("event_date",event.getEventDate());

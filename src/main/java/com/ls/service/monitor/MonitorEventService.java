@@ -11,5 +11,15 @@ public interface MonitorEventService extends IService<MonitorEvent> {
 
     Integer getCount(MonitorEvent monitorEvent);
 
-    void saveEvent(List<MonitorEvent> events);
+    void saveWeChatEvent(List<MonitorEvent> events);
+
+    void saveSouHuNewsEvent(List<MonitorEvent> zhiHuEvent);
+
+    void saveZhiHuEvent(List<MonitorEvent> zhiHuEvent);
+
+    void saveTieBaEvent(List<MonitorEvent> tieBaEvent);
+
+    void saveTianYaEvent(List<MonitorEvent> tianYaEvent);
+
+    void saveSinaNewsEvent(List<MonitorEvent> sinaNewsEvent);
 }

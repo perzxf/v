@@ -25,10 +25,9 @@ import java.util.Random;
  */
 @Component
 @Slf4j
-public class WeChatProcessor implements PageProcessor {
+public class SouHuNewsProcessor implements PageProcessor {
 
-    private static final Logger log = LoggerFactory.getLogger(WeChatProcessor.class);
-
+    private static final Logger log = LoggerFactory.getLogger(SouHuNewsProcessor.class);
 
     /**
      * 解析页面
@@ -37,7 +36,7 @@ public class WeChatProcessor implements PageProcessor {
     @Override
     public void process(Page page) {
         //解析列表页
-        List<Selectable> nodes = page.getHtml().css("div.news-box ul>li").nodes();
+        List<Selectable> nodes = page.getHtml().css("div.results").nodes();
 
         if (CollUtil.isNotEmpty(nodes)) {
             //不为空表示这是数据详情页,解析页面,获取详情信息,保存数据
@@ -57,26 +56,26 @@ public class WeChatProcessor implements PageProcessor {
         List<MonitorEvent> infoList = new ArrayList<>();
         //解析页面
         Html html = page.getHtml();
-        List<Selectable> nodes = html.css("div.news-box ul>li").nodes();
+        List<Selectable> nodes = html.css("div.results div.vrwrap").nodes();
         for (Selectable node : nodes) {
-            String title = node.xpath("//div[@class='txt-box']/h3/a/allText()").toString();  //标题
-            String content = node.xpath("//div[@class='txt-box']/p/allText()").toString(); //内容
-            String link = node.xpath("//div[@class='txt-box']/h3/a/@href").toString(); //链接
-            String worker = node.xpath("//div[@class='txt-box']/div/a/allText()").toString(); //作者
-            String time = node.xpath("//div[@class='txt-box']/div/@t").toString(); //发表时间的时间戳
+            String title = node.xpath("//div[@class='news200616']/h3/a/allText()").toString();  //标题
+            String content = node.xpath("//p[@class='star-wiki']/allText()").toString(); //内容
+            String link = node.xpath("//div[@class='news200616']/h3/a/@href").toString(); //链接
+            String worker = node.xpath("//p[@class='news-from']/span[1]/allText()").toString(); //作者
+            String time = node.xpath("//p[@class='news-from']/span[2]/allText()").toString(); //发表时间的时间(2018年9月26日)
 
             MonitorEvent event = new MonitorEvent();
             event.setEventTitle(title); //标题
             event.setEventContent(content); //内容
             event.setEventUrl(link); //链接
-            Date date = DateUtil.formatTimeStampToDate(time, "yyyy-MM-dd HH:mm:ss");
+            Date date = DateUtil.formatString(time, "yyyy年MM月dd日");
             event.setEventDate(date); //事件发生时间
 
             infoList.add(event);
         }
 
         //把结果保存到resultItems,为了持久化
-        page.putField("weChatInfoList", infoList);
+        page.putField("souHuNewsInfoList", infoList);
     }
 
     //user_Agent池
@@ -113,4 +112,5 @@ public class WeChatProcessor implements PageProcessor {
     public Site getSite() {
         return site;
     }
+
 }

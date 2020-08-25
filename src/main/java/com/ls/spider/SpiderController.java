@@ -56,6 +56,7 @@ public class SpiderController {
                 List<String> keyList = new ArrayList<>();
                 if(StringUtil.isNotEmpty(item.getKeywords())){
                     String[] keys = item.getKeywords().split(",");
+                    keyList.add(item.getMonitorName());
                     for(String word:keys){
                         //项目名和关键词的组合
                         String key = item.getMonitorName() + word;

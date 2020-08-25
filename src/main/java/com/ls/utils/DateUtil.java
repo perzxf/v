@@ -34,10 +34,55 @@ public class DateUtil {
     }
 
     public static void main(String[] args) throws ParseException {
-        String timeStamp = "1495710137";
-        String date = timeStamp2Date(timeStamp, "yyyy-MM-dd HH:mm:ss");
-        Date date1 = formatString(date, "yyyy-MM-dd HH:mm:ss");
-        System.out.println(date1);
+
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+//        Date date = sdf.parse("2020-07-21 10:26");
+//        Date date = formatString("2020-07-21 10:26", "yyyy-MM-dd HH:mm");
+//        System.out.println(date);
+
+//        String timeStamp = "2018年9月26日";
+//        String date = timeStamp2Date(timeStamp, "yyyy年MM月dd日");
+//        Date date1 = formatString(timeStamp, "yyyy年MM月dd日");
+//        System.out.println(date1);
+
+//        String address = new String("知乎专栏 - zhuanlan.zhihu.com/p... - 2019-1-11");
+//        int i = address.indexOf("-",address.indexOf("-")+1);
+//        String substring = address.substring(31);
+//        System.out.println(substring);
+
+//        String[] str = address.split("\\-");
+//        for(String s : str){
+//            System.out.println(s);
+//        }
+
+//        String str ="232ljsfsf.sdfl23.ljsdfsdfsdfss.23423.sdfsdfsfd";
+//        //获得第一个点的位置
+//        int index=str.indexOf(".");
+//        System.out.println(index);
+//        //根据第一个点的位置 获得第二个点的位置
+//        index=str.indexOf(".", index+1);
+//        //根据第二个点的位置，截取 字符串。得到结果 result
+//        String result=str.substring(index+1);
+//        //输出结果
+//        System.out.println(result);
+
+//        Date date = formatStringToDate("知乎专栏 - zhuanlan.zhihu.com/p... - 2019-1-11", "yyyy-MM-dd");
+//        System.out.println(date);
+
+        String str = "ins生活-inszine 2020-08-13 20:50:00";
+        int index=str.indexOf(" ");
+        String result=str.substring(index+1);
+        Date date = formatString(result, "yyyy-MM-dd HH:mm:ss");
+        System.out.println(date);
+    }
+
+
+    public static Date formatStringToDate(String str,String format) throws ParseException {
+        int index=str.indexOf("-");
+        index=str.indexOf("-", index+1);
+        String result=str.substring(index+1);
+        Date date = formatString(result, format);
+        return date;
     }
 
 
