@@ -3,7 +3,7 @@ package com.ls.common;
 public enum RedisCacheKey {
 
     OPENID("openid","微信用户唯一openid","String",-1),
-
+    MONITOR("monitor","项目信息","String",-1),
             ;
 
 

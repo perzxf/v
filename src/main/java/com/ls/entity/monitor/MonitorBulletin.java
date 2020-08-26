@@ -17,6 +17,8 @@ public class MonitorBulletin {
      */
     private Long eventId;
 
+    private transient  String  eventTitle;
+
     public Long getBulletinId() {
         return bulletinId;
     }
@@ -39,5 +41,13 @@ public class MonitorBulletin {
 
     public void setEventId(Long eventId) {
         this.eventId = eventId;
+    }
+
+    public String getEventTitle() {
+        return eventTitle;
+    }
+
+    public void setEventTitle(String eventTitle) {
+        this.eventTitle = eventTitle;
     }
 }

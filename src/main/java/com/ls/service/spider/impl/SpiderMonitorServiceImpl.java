@@ -23,6 +23,7 @@ public class SpiderMonitorServiceImpl implements SpiderMonitorService {
      *  网站类型（1：微博，2：贴吧，3：论坛，4：新闻，5：公众号，6：博客，7：自媒体，8：其他）
      */
 
+
     @Override
     public void spiderMonitor(Long siteTypeId, String siteUrl, List<String> keyList) {
 
@@ -50,7 +51,8 @@ public class SpiderMonitorServiceImpl implements SpiderMonitorService {
                     getWeChatInfo(siteUrl,key);
                     break;
                 case 6:
-                    System.out.println("博客");
+                    System.out.println("今日头条");
+                    getTouTiaoInfo(siteUrl,key);
                     break;
                 case 7:
                     System.out.println("搜狗知乎");
@@ -244,5 +246,26 @@ public class SpiderMonitorServiceImpl implements SpiderMonitorService {
                     .run();
 
         }
+    }
+
+    @Autowired
+    private TouTiaoProcessor touTiaoProcessor;
+
+    /**
+     * 今日头条
+     * @param siteUrl
+     * @param key
+     */
+    private void getTouTiaoInfo(String siteUrl, String key) {
+        siteUrl = "https://www.toutiao.com/search/?keyword="+key;
+        log.info("开始爬取数据,{}",siteUrl);
+        //设置爬虫配置
+        Spider.create(touTiaoProcessor)
+                .addUrl(siteUrl) //设置初始爬取的url
+                //使用布隆过滤器过滤重复url,需要引入guava包
+                .setScheduler(new QueueScheduler().setDuplicateRemover(new BloomFilterDuplicateRemover(100000)))
+                .thread(50) //设置线程数
+                .addPipeline(mysqlPipeline) //设置持久化
+                .run();
     }
 }

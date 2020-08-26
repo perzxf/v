@@ -1,10 +1,12 @@
 package com.ls.spider;
 
+import com.ls.common.RedisCacheKey;
 import com.ls.entity.monitor.MonitorItem;
 import com.ls.entity.system.SysSite;
 import com.ls.service.monitor.MonitorItemService;
 import com.ls.service.spider.SpiderMonitorService;
 import com.ls.service.system.SysSiteService;
+import com.ls.utils.RedisUtil;
 import com.ls.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,10 +41,16 @@ public class SpiderController {
     @Autowired
     private SysSiteService siteService;
 
+    @Autowired
+    private RedisUtil redisUtil;
+
     @PostMapping("/monitor")
     @ResponseBody
     public Map<String,Object> spiderMonitor(Long monitorId){
         Map<String, Object> map = new HashMap<>();
+
+        String redisKey = RedisCacheKey.MONITOR.getType();
+        redisUtil.set(redisKey,monitorId,30*60);
 
         //根据项目ID读取项目数据
         MonitorItem item = itemService.getMonitorItemById(monitorId);
@@ -65,7 +73,12 @@ public class SpiderController {
                 }
                 //根据网站和关键词监测项目
                 spiderMonitorService.spiderMonitor(siteTypeId,siteUrl,keyList);
+                map.put("success", true);
+                map.put("msg", "开启监测成功，请刷新页面");
             }
+        }else{
+            map.put("success", false);
+            map.put("msg", "网站为空");
         }
 
         return map;

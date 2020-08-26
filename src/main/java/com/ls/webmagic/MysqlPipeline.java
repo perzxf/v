@@ -48,5 +48,9 @@ public class MysqlPipeline implements Pipeline {
         if (sinaNewsEvent != null) {
             eventService.saveSinaNewsEvent(sinaNewsEvent);
         }
+        List<MonitorEvent> touTiaoEvent = resultItems.get("touTiaoInfoList");
+        if (touTiaoEvent != null) {
+            eventService.saveTouTiaoEvent(touTiaoEvent);
+        }
     }
 }

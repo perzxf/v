@@ -22,4 +22,10 @@ public interface MonitorEventService extends IService<MonitorEvent> {
     void saveTianYaEvent(List<MonitorEvent> tianYaEvent);
 
     void saveSinaNewsEvent(List<MonitorEvent> sinaNewsEvent);
+
+    void saveTouTiaoEvent(List<MonitorEvent> touTiaoEvent);
+
+    MonitorEvent getEventById(Long eventId);
+
+    void updateEvent(Long eventId, int i);
 }

@@ -37,4 +37,14 @@ public class StringUtil {
         }
         return result;
     }
+
+
+    public static boolean getResult(String targetStr, String str) {
+        if (targetStr.contains(str)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

@@ -6,11 +6,15 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import com.ls.common.RedisCacheKey;
 import com.ls.entity.monitor.MonitorEvent;
 import com.ls.mapper.monitor.MonitorEventMapper;
 import com.ls.service.monitor.MonitorEventService;
+import com.ls.utils.RedisUtil;
+import com.ls.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -20,6 +24,24 @@ import java.util.List;
 public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, MonitorEvent> implements MonitorEventService {
 
     private static final Logger log = LoggerFactory.getLogger(MonitorEventServiceImpl.class);
+
+    @Autowired
+    private RedisUtil redisUtil;
+
+    @Override
+    public MonitorEvent getEventById(Long eventId) {
+        MonitorEvent event = new MonitorEvent();
+        event.setEventId(eventId);
+        return baseMapper.selectOne(event);
+    }
+
+    @Override
+    public void updateEvent(Long eventId, int state) {
+        MonitorEvent event = new MonitorEvent();
+        event.setEventId(eventId);
+        event.setState(state);
+        baseMapper.updateById(event);
+    }
 
     @Override
     public List<MonitorEvent> selectEventList(MonitorEvent item, Integer page, Integer rows) {
@@ -52,9 +74,17 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
         return count;
     }
 
+    private Long getRedisMonitor(){
+        String redisKey = RedisCacheKey.MONITOR.getType();
+        Integer id = (Integer) redisUtil.get(redisKey);
+        return id.longValue();
+    }
+
     @Override
     public void saveWeChatEvent(List<MonitorEvent> events) {
+        Long redisMonitorId = getRedisMonitor();
         for (MonitorEvent event:events){
+            event.setMonitorId(redisMonitorId);
             event.setSiteTypeId(5l); //网站数据类型
             String link = "https://weixin.sogou.com"+event.getEventUrl();
             //判断记录是否已存在
@@ -75,14 +105,19 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
 
     @Override
     public void saveSouHuNewsEvent(List<MonitorEvent> events) {
+        Long redisMonitorId = getRedisMonitor();
         for (MonitorEvent event:events){
+            event.setMonitorId(redisMonitorId);
             event.setSiteTypeId(8l); //网站数据类型
-            String link = "https://www.sogou.com"+event.getEventUrl();
+
             //判断记录是否已存在
             List<MonitorEvent> list = selectInfo(event);
             if (CollUtil.isEmpty(list)) {
                 //把url放到任务队列中
-                event.setEventUrl(link);
+                if(!StringUtil.getResult(event.getEventUrl(), "http")){
+                    String link = "https://www.sogou.com"+event.getEventUrl();
+                    event.setEventUrl(link);
+                }
                 event.setCreateDate(new Date());
                 event.setState(0);
                 event.setEventType(0);
@@ -96,7 +131,9 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
 
     @Override
     public void saveZhiHuEvent(List<MonitorEvent> events) {
+        Long redisMonitorId = getRedisMonitor();
         for (MonitorEvent event:events){
+            event.setMonitorId(redisMonitorId);
             event.setSiteTypeId(7l); //网站数据类型
             String link = "https://www.sogou.com"+event.getEventUrl();
             //判断记录是否已存在
@@ -117,7 +154,9 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
 
     @Override
     public void saveTieBaEvent(List<MonitorEvent> events) {
+        Long redisMonitorId = getRedisMonitor();
         for (MonitorEvent event:events){
+            event.setMonitorId(redisMonitorId);
             event.setSiteTypeId(2l); //网站数据类型
             String link = "https://tieba.baidu.com"+event.getEventUrl();
             //判断记录是否已存在
@@ -138,7 +177,9 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
 
     @Override
     public void saveTianYaEvent(List<MonitorEvent> events) {
+        Long redisMonitorId = getRedisMonitor();
         for (MonitorEvent event:events){
+            event.setMonitorId(redisMonitorId);
             event.setSiteTypeId(3l); //网站数据类型
 //            String link = "https://tieba.baidu.com"+event.getEventUrl();
             //判断记录是否已存在
@@ -159,7 +200,9 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
 
     @Override
     public void saveSinaNewsEvent(List<MonitorEvent> events) {
+        Long redisMonitorId = getRedisMonitor();
         for (MonitorEvent event:events){
+            event.setMonitorId(redisMonitorId);
             event.setSiteTypeId(4l); //网站数据类型
 //            String link = "https://tieba.baidu.com"+event.getEventUrl();
             //判断记录是否已存在
@@ -177,6 +220,30 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
             }
         }
     }
+
+    @Override
+    public void saveTouTiaoEvent(List<MonitorEvent> events) {
+        Long redisMonitorId = getRedisMonitor();
+        for (MonitorEvent event:events){
+            event.setMonitorId(redisMonitorId);
+            event.setSiteTypeId(6l); //网站数据类型
+//            String link = "https://tieba.baidu.com"+event.getEventUrl();
+            //判断记录是否已存在
+//            List<MonitorEvent> list = selectInfo(event);
+//            if (CollUtil.isEmpty(list)) {
+                //把url放到任务队列中
+//                event.setEventUrl(link);
+                event.setCreateDate(new Date());
+                event.setState(0);
+                event.setEventType(0);
+                baseMapper.insert(event);
+                log.info("保存的信息：{}",event.toString());
+//            } else {
+//                log.info("记录已存在,记录title:{}",event.getEventTitle());
+//            }
+        }
+    }
+
 
     private List<MonitorEvent> selectInfo(MonitorEvent event) {
         Wrapper<MonitorEvent> wrapper = new EntityWrapper<>();
