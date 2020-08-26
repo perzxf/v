@@ -1,10 +1,13 @@
 package com.ls.entity.monitor;
 
+import com.baomidou.mybatisplus.annotations.TableId;
+
 public class MonitorBulletin {
 
     /**
      * 简报ID
      */
+    @TableId
     private Long bulletinId;
 
     /**
