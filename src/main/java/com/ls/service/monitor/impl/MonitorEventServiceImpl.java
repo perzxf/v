@@ -44,6 +44,30 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
     }
 
     @Override
+    public List<MonitorEvent> getEventList(Long monitorId) {
+        Wrapper<MonitorEvent> wrapper = new EntityWrapper<>();
+        wrapper.eq("monitor_id", monitorId);
+        return baseMapper.selectList(wrapper);
+    }
+
+    @Override
+    public Integer getEventCount(String eventDate) {
+        Wrapper<MonitorEvent> wrapper = new EntityWrapper<>();
+        wrapper.like("event_date", eventDate); // 模糊查询
+        Integer count = baseMapper.selectCount(wrapper);
+        return count;
+    }
+
+    @Override
+    public Integer getPieEventCount(Long monitorId, Long siteTypeId) {
+        Wrapper<MonitorEvent> wrapper = new EntityWrapper<>();
+        wrapper.eq("monitor_id", monitorId);
+        wrapper.eq("site_type_id", siteTypeId);
+        Integer count = baseMapper.selectCount(wrapper);
+        return count;
+    }
+
+    @Override
     public List<MonitorEvent> selectEventList(MonitorEvent item, Integer page, Integer rows) {
         //设置分页
         Page<MonitorEvent> userPage = new Page<>();

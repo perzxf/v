@@ -69,11 +69,19 @@ public class DateUtil {
 //        Date date = formatStringToDate("知乎专栏 - zhuanlan.zhihu.com/p... - 2019-1-11", "yyyy-MM-dd");
 //        System.out.println(date);
 
-        String str = "ins生活-inszine 2020-08-13 20:50:00";
-        int index=str.indexOf(" ");
-        String result=str.substring(index+1);
-        Date date = formatString(result, "yyyy-MM-dd HH:mm:ss");
-        System.out.println(date);
+//        String str = "ins生活-inszine 2020-08-13 20:50:00";
+//        int index=str.indexOf(" ");
+//        String result=str.substring(index+1);
+//        Date date = formatString(result, "yyyy-MM-dd HH:mm:ss");
+//        System.out.println(date);
+
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String format = sdf.format(date);
+        System.out.println(format);
+//        String[] strNow1 = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString().split("-");
+//        System.out.println(strNow1);
+
     }
 
 

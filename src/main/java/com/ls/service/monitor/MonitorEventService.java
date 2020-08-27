@@ -28,4 +28,10 @@ public interface MonitorEventService extends IService<MonitorEvent> {
     MonitorEvent getEventById(Long eventId);
 
     void updateEvent(Long eventId, int i);
+
+    List<MonitorEvent> getEventList(Long monitorId);
+
+    Integer getEventCount(String eventDate);
+
+    Integer getPieEventCount(Long monitorId, Long siteTypeId);
 }
