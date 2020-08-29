@@ -272,40 +272,36 @@
 
     }
 
+    //邮件预警
     function emailWarn(eventId,eventTitle,eventUrl){
 
-        let bbb = `
-            <html>
-                <body>
-                    <div>
-                        ${eventTitle}:
-                            <a href="${eventUrl}" >${eventUrl}</a>
-                     </div>
-                </body>
-            </html>
+        let content = `
+            <html><body><div>
+                <p><h3>预警事件:</h3></p>
+                <div style="color: red">
+                    ${eventTitle}
+                </div>
+                <p><a href="${eventUrl}" >点击查看</a></p>
+            </div></body></html>
         `
-        let a = eventTitle +":"+eventUrl
-        // alert($(".page-header").attr("value"));
         $.ajax({
             url : "/email/html",    //后台controller中的请求路径
             type : 'POST',
             async : false,
             data : {
-                // accepter : $(".page-header").attr("value"),
-                accepter: "cx525606@163.com",
-                subject : "预警报告",
-                content : bbb,
+                accepter : $(".page-header").attr("value"),  //收件人邮箱
+                // accepter: "cx525606@163.com",
+                subject : "舆情监测预警提醒",   //邮件主题
+                content : content,           //邮件内容
             },
             datatype : 'json',
             success : function(res) {
                if(res.success){
-
-                   alert("邮件发送成功！");
+                   swal("邮件发送成功！","","success");
                }
-
             },
             error : function() {
-                alert('邮件未能发出！请重试！');
+                swal('邮件未能发出！请重试！',"","error");
             }
         });
 

@@ -2,6 +2,8 @@ package com.ls;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
 /**
  * 热更新、热加载
  * 1、Settings->Compiler->Build project automatically
@@ -10,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  */
 @SpringBootApplication
+@EnableScheduling   //开启定时任务
 public class VLoushiApplication {
 
     public static void main(String[] args) {

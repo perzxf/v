@@ -30,4 +30,11 @@ public class ConstantConfig {
      * 初始密码
      */
     public static final String RESET_PASSWORD = "000000";
+
+
+    public final static Integer EVENT_STATE = 0; //未加入简报
+
+    public final static Integer EVENT_TYPE_NEGATIVE = -1; //事件类型 负面
+    public final static Integer EVENT_TYPE_NEUTRAL = 0; //事件类型 中性
+    public final static Integer EVENT_TYPE_POSITIVE = 1; //事件类型 正面
 }

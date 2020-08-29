@@ -27,7 +27,7 @@ public interface MonitorEventService extends IService<MonitorEvent> {
 
     MonitorEvent getEventById(Long eventId);
 
-    void updateEvent(Long eventId, int i);
+    void updateEvent(Long eventId, int state);
 
     List<MonitorEvent> getEventList(Long monitorId);
 
