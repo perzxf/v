@@ -18,7 +18,7 @@
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="home">
                 <div class="panel panel-default">
-                    <div class="panel-body text-center">
+                    <!--<div class="panel-body text-center">
                         <form class="form-inline">
                             <div class="form-group">
                                 <label for="nickName">项目名称</label>
@@ -26,7 +26,7 @@
                             </div>
                             <button type="submit" class="btn btn-primary">搜索</button>
                         </form>
-                    </div>
+                    </div>-->
                     <div class="row">
                         <div class="col-sm-10 col-sm-offset-1">
                             <table id="itemList"></table>
@@ -40,7 +40,7 @@
                     <div class="panel-body text-center">
                         <form class="form-inline">
                             <div class="form-group">
-                                <label for="nickName">项目选择：</label>
+                                <label for="monitorId">项目选择：</label>
                                 <select class="selectpicker" id="monitorId" name="monitorId" ></select>
                             </div>
                         </form>
@@ -127,7 +127,7 @@
                 {name: "keywords", align: "center", editable: true},
                 {name: "remark", align: "center", editable: true},
                 {name: "createDate", align: "center", editable: true},
-                {name: "userId", align: "center", editable: true},
+                {name: "userName", align: "center", editable: true},
                 {name:"caozuo",align:"center", editable: false,search:false,
                     formatter:function(cellvalue, options, rowObject){
                         //console.log(rowObject.userId);
