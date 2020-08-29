@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,9 +66,20 @@ public class LoginController {
                 String userName = (String) SecurityUtils.getSubject().getPrincipal();
                 SysUser currentUser = userService.findByUserName(userName);
                 if (currentUser.getIsOff() == ConstantConfig.ISOFF) {
-                    session.setAttribute(ConstantConfig.CURRENT_USER,currentUser);
-                    map.put("success", true);
-                    map.put("msg", "登陆成功");
+                    Date endDate = currentUser.getEndDate();
+                    if(endDate.getTime() >= new Date().getTime()){
+                        session.setAttribute(ConstantConfig.CURRENT_USER,currentUser);
+                        map.put("success", true);
+                        map.put("msg", "登陆成功");
+                    }else{
+                        SysUser sysUser = new SysUser();
+                        sysUser.setUserId(currentUser.getUserId());
+                        sysUser.setIsOff(ConstantConfig.NOOFF);
+                        userService.updateById(sysUser);
+                        map.put("success", false);
+                        map.put("msg", "该用户服务时间已到期，如有需要请联系管理员！");
+                        subject.logout();
+                    }
                 } else {
                     map.put("success", false);
                     map.put("msg", "该用户已封禁，请联系管理员！");
