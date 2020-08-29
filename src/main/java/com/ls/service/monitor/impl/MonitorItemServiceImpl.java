@@ -9,6 +9,7 @@ import com.ls.entity.monitor.MonitorItem;
 import com.ls.entity.system.SysUser;
 import com.ls.mapper.monitor.MonitorItemMapper;
 import com.ls.service.monitor.MonitorItemService;
+import com.ls.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -39,8 +40,11 @@ public class MonitorItemServiceImpl extends ServiceImpl<MonitorItemMapper, Monit
         //查询条件
         Wrapper<MonitorItem> wrapper = new EntityWrapper<>();
         wrapper.ge("monitor_id",1); //userId 大于等于1
-        if(item != null){
+        if(StringUtil.isNotEmpty(item.getMonitorName())){
             wrapper.like("monitor_name", item.getMonitorName()); // 模糊查询
+        }
+        if(item.getUserId() != null){
+            wrapper.eq("user_id",item.getUserId());
         }
         wrapper.orderBy("create_date", false); // 按照创建时间倒序排序
 
@@ -52,6 +56,9 @@ public class MonitorItemServiceImpl extends ServiceImpl<MonitorItemMapper, Monit
     @Override
     public Integer getCount(MonitorItem item) {
         Wrapper<MonitorItem> wrapper = new EntityWrapper<>();
+        if(item.getUserId() != null){
+            wrapper.eq("user_id",item.getUserId());
+        }
         Integer count = baseMapper.selectCount(wrapper);
         log.info("查询到用户信息一共{}条",count);
         return count;
