@@ -2,8 +2,11 @@ package com.ls.controller.monitor;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.ls.common.ConstantConfig;
 import com.ls.entity.monitor.MonitorItem;
+import com.ls.entity.system.SysUser;
 import com.ls.service.monitor.MonitorItemService;
+import com.ls.service.system.SysUserService;
 import com.ls.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,7 +26,8 @@ public class MonitorItemController {
 
     @Autowired
     private MonitorItemService itemService;
-
+    @Autowired
+    private SysUserService userService;
 
     @PostMapping("/item/add")
     @ResponseBody
@@ -53,13 +57,25 @@ public class MonitorItemController {
      */
     @GetMapping("/item/findAll")
     @ResponseBody
-    public Map<String, Object> findAll(Integer page, Integer rows){
+    public Map<String, Object> findAll(Integer page, Integer rows,HttpSession session){
         Map<String, Object> map = new HashMap<>();
 
+        MonitorItem item = new MonitorItem();
+        //获取session用户
+        SysUser user = (SysUser) session.getAttribute(ConstantConfig.CURRENT_USER);
+        Long userId = user.getUserId();
+        if(userId != 1l){
+            item.setUserId(userId);
+        }
+
         //当前页数据
-        List<MonitorItem> lists = itemService.selectUserList(new MonitorItem(),page, rows);
+        List<MonitorItem> lists = itemService.selectUserList(item,page, rows);
+        for(MonitorItem monitorItem:lists){
+            SysUser byUserId = userService.getByUserId(monitorItem.getUserId());
+            monitorItem.setUserName(byUserId.getNickName());
+        }
         //总条数
-        Long totals = itemService.getCount(new MonitorItem()).longValue();
+        Long totals = itemService.getCount(item).longValue();
         //总页数
         Long totalPage = totals % rows == 0 ? totals / rows : totals / rows + 1;
 
@@ -70,11 +86,25 @@ public class MonitorItemController {
         return map;
     }
 
+    /**
+     * 数据项目选择
+     * @return
+     */
     @GetMapping("/item/listpark")
     @ResponseBody
-    public Map<String, Object> listPark(){
+    public Map<String, Object> listPark(HttpSession session){
         Map<String, Object> map = new HashMap<>();
+
+        //获取session用户
+        SysUser user = (SysUser) session.getAttribute(ConstantConfig.CURRENT_USER);
+        Long userId = user.getUserId();
+
         Wrapper<MonitorItem> wrapper = new EntityWrapper<>();
+        if(userId != null){
+            if(userId != 1l){
+                wrapper.eq("user_id",userId);
+            }
+        }
         List<MonitorItem> items = itemService.selectList(wrapper);
         map.put("data", items);
         map.put("success", true);
