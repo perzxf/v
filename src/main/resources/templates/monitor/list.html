@@ -4,9 +4,9 @@
     }
 </style>
 <!--页面中心内容-->
-<div class="col-sm-10">
+<div class="col-sm-10" xmlns:th="http://www.thymeleaf.org">
     <!--页头-->
-    <div class="page-header" style="margin-top: -20px;margin-bottom: 5px">
+    <div class="page-header" style="margin-top: -20px;margin-bottom: 5px" th:value="${session.currentUser.getEmail()}">
         <h1>查看项目</h1>
     </div>
     <!--标签页组件-->
@@ -35,46 +35,30 @@
                     </div>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-pane" id="profile">
+            <div role="tabpanel" class="tab-pane" id="profile" >
                 <div class="panel panel-default">
                     <div class="panel-body text-center">
                         <form class="form-inline">
                             <div class="form-group">
                                 <label for="nickName">项目选择：</label>
-                                <select class="selectpicker" id="monitorId" name="monitorId" onchange="selectOnchang(this)"></select>
+                                <select class="selectpicker" id="monitorId" name="monitorId" ></select>
                             </div>
                         </form>
                     </div>
                     <div class="row">
-                        <table id="eventList"></table>
-                        <div id="eventPager"></div>
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <table id="eventList"></table>
+                            <div id="eventPager"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script >
 
-
-<div class="modal fade" id="myLookModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">查看原文</h4>
-            </div>
-            <div class="modal-body">
-                <div class="lookModal"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
     $(function () {
-
-        $('#myLookModal').modal('hide');
-
         //初始化表格
         itemListLoad();
 
@@ -89,16 +73,23 @@
         loadParkdata();    //执行此函数，从后台获取数据，拼接成option标签，添加到select的里面
     });
 
-    function selectOnchang(obj) {
-        const monitorId = $('#monitorId').val();
-        eventListLoad(monitorId);
-        // alert(monitorId +":"+ name)
-    }
+
+    $("#monitorId").on("change",function () {
+
+        for(let i=0; i< 10; i++ ) {
+            const monitorId = $('#monitorId').val();
+            eventListLoad(monitorId);
+            $('.selectpicker').selectpicker('refresh');
+        }
+
+    })
+
 
     function loadParkdata(){
         $.ajax({
             url : "/monitor/item/listpark",    //后台controller中的请求路径
             type : 'GET',
+            async : false,
             datatype : 'json',
             success : function(res) {
                 if(res.success){
@@ -150,15 +141,14 @@
         });
     }
 
-
     //开启监测
     function startMonitor(monitorId){
         $.ajax({
             url : "/spider/monitor",    //后台controller中的请求路径
             type : 'POST',
             data:{
-                    monitorId:monitorId
-                 },
+                monitorId:monitorId
+            },
             datatype : 'json',
             success : function(res) {
                 if(res.success){
@@ -174,7 +164,10 @@
     }
 
 
+
     function eventListLoad(monitorId) {
+
+
         $("#eventList").jqGrid('clearGridData');  //清空表格
 
         $("#eventList").jqGrid({
@@ -182,7 +175,7 @@
             url: "/monitor/event/findAll?monitorId="+monitorId,    //用来远程获取数据地址  json格式类型 [{"id":"1","name":"张三"},{}]
             datatype: "JSON",   //用来指定服务返回的数据类型  默认是:xml 修改为:json
             autowidth: true,    //自适应父容器
-            caption: "项目数据列表",    //用来指定表格的标题
+            caption: "数据列表",    //用来指定表格的标题
             hidegrid: false,    //用来控制在使用标题情况下是否显示折叠按钮
             height:500,     //指定高度
             colNames: ["编号", "数据类型","标题", "事件发生时间",  "数据抓取时间", "是否加入简报","事件类型","是否预警","原文缓存"],    //用来指定表格中标题列的名称  colNames 和 colModel 必须成对出现  长度一致
@@ -269,14 +262,55 @@
             rowNum: 10,  //用来指定每页显示记录数
             rowList: [5, 10, 15, 20],  //用来指定下拉列表中每页显示条数
             viewrecords: true , //用来显示总记录数
+            jsonReader:{
+                page: "page",
+                root: "rows"
+            },
+            
+
         });
-    }
-
-    //邮件预警
-    function emailWarn(eventId,title,url) {
 
     }
-    
+
+    function emailWarn(eventId,eventTitle,eventUrl){
+
+        let bbb = `
+            <html>
+                <body>
+                    <div>
+                        ${eventTitle}:
+                            <a href="${eventUrl}" >${eventUrl}</a>
+                     </div>
+                </body>
+            </html>
+        `
+        let a = eventTitle +":"+eventUrl
+        // alert($(".page-header").attr("value"));
+        $.ajax({
+            url : "/email/html",    //后台controller中的请求路径
+            type : 'POST',
+            async : false,
+            data : {
+                // accepter : $(".page-header").attr("value"),
+                accepter: "cx525606@163.com",
+                subject : "预警报告",
+                content : bbb,
+            },
+            datatype : 'json',
+            success : function(res) {
+               if(res.success){
+
+                   alert("邮件发送成功！");
+               }
+
+            },
+            error : function() {
+                alert('邮件未能发出！请重试！');
+            }
+        });
+
+    }
+
     //查看原文
     function lookOriginal(content) {
         $('#myLookModal').modal('show');
@@ -306,5 +340,6 @@
             }
         });
     }
+
 
 </script>

@@ -8,16 +8,29 @@ import com.ls.entity.monitor.MonitorBulletin;
 import com.ls.entity.system.SysUser;
 import com.ls.mapper.monitor.MonitorBulletinMapper;
 import com.ls.service.monitor.MonitorBulletinService;
+import com.ls.utils.RandomUtils;
+import freemarker.template.Configuration;
+import freemarker.template.DefaultObjectWrapper;
+import freemarker.template.Template;
+import freemarker.template.TemplateExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 @Service
 public class MonitorBulletinServiceImpl extends ServiceImpl<MonitorBulletinMapper, MonitorBulletin> implements MonitorBulletinService {
 
     private static final Logger log = LoggerFactory.getLogger(MonitorBulletinServiceImpl.class);
+    private static Configuration cfg = new Configuration(Configuration.getVersion());
+
+
+
 
     @Override
     public void bulletinAdd(Long monitorId, Long eventId) {
@@ -61,6 +74,43 @@ public class MonitorBulletinServiceImpl extends ServiceImpl<MonitorBulletinMappe
         }else{
             return false;
         }
+    }
+
+    @Override
+    public File createBulletin(Map data) {
+
+        Writer out = null;
+        File file = new File(System.getProperty("user.dir")+"/src/main/resources/temp/"+ RandomUtils.string(15) +".docx");
+        cfg.setClassForTemplateLoading(this.getClass(),"/templates/ftl");
+        cfg.setEncoding(Locale.CHINESE,"utf-8");
+        cfg.setObjectWrapper(new DefaultObjectWrapper());
+        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.IGNORE_HANDLER);
+        try {
+            Template template = cfg.getTemplate("vlousmuban1.ftl");
+
+            out = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+            /**
+             * @data 是输入
+             * @out 是输出
+             */
+            template.process(data,out);
+
+            out.flush();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(null != out){
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+        return file;
+
     }
 
 }

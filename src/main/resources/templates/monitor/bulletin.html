@@ -25,8 +25,10 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-10 col-sm-offset-1">
+
                             <table id="itemList"></table>
                             <div id="pager"></div>
+                            <div id="t_itemList"></div>
                         </div>
                     </div>
                 </div>
@@ -34,6 +36,7 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" src="/assets/pdfjs/build/pdf.js"></script>
 <script>
     $(function () {
         //初始化表格
@@ -53,19 +56,74 @@
             colModel: [
                 {name: "bulletinId", align: "center", editable: true,search:false,
                     formatter:function(cellvalue, options, rowObject){
-                        return '<input type="checkbox" value=\''+rowObject.bulletinId+'\'>'
+                        return '<input type="" value=\''+rowObject.bulletinId+'\'>'
                     }},
                 {name: "eventTitle", align: "center", editable: true},
                 {name:"caozuo",align:"center", editable: false,search:false,
                     formatter:function(cellvalue, options, rowObject){
                         //console.log(rowObject.userId);
-                        return '<a class="btn btn-danger" onclick="startMonitor(\''+rowObject.bulletinId+'\')">生成报告</a>'
+                        return '<a class="btn btn-danger" onclick="createBulletin(\''+rowObject.bulletinId+'\',\''+rowObject.monitorId+'\',\''+rowObject.eventId+'\')">生成报告</a>' +
+                            '<a class="btn btn-success" onclick="showBulletin(\''+rowObject.bulletinId+'\',\''+rowObject.monitorId+'\',\''+rowObject.eventId+'\')">查看报告</a>'
                     }}
             ],
+            toolbar : [true,"top"],
+            multiselect : true,
             pager: "#pager",    //用来指定分页工具栏标签的id
             rowNum: 10,  //用来指定每页显示记录数
             rowList: [5, 10, 15, 20],  //用来指定下拉列表中每页显示条数
             viewrecords: true , //用来显示总记录数
         });
+
+        $("#t_itemList")
+            .append("<button class='btn btn-default btn-xs' id='createReport' >一键生成报告</button>" +
+                "<button class='btn btn-default btn-xs' id='allCheck' >全选</button>"
+                // "<input type='checkbox' class='btn btn-default btn-xs' id='checkboxAll' />"
+            );
+        $("#createReport", "#t_itemList").click(function() {
+            alert("Hi! I'm added button at this toolbar of top");
+        });
+        $("#allCheck", "#t_itemList").click(function() {
+            alert("Hi! I'm added button at this toolbar of top");
+        });
+
+
+
+    }
+
+    function createBulletin(bulletinId,monitorId,eventId) {
+        $.ajax({
+            url : "/monitor/bulletin/create",    //后台controller中的请求路径
+            type : 'POST',
+            data:{
+                bulletinId: bulletinId,
+                monitorId: monitorId,
+                eventId: eventId
+            },
+            datatype : 'json',
+            success : function(res) {
+                if(res.success){
+                    swal(res.msg,'','success');
+                }else{
+                    swal(res.msg,'','error');
+                }
+            },
+            error : function() {
+                swal('监测出错','','error');
+            }
+        });
+
+    }
+
+    function showBulletin() {
+        // let filePath= "PDFDemo.pdf";
+        // window.location.href = "/assets/pdfjs/web/viewer.html?file=file.pdf";
+        // window.open("assets/pdfjs/web/viewer.html?file=../PDFDemo.pdf");
+
+        let curWwwPath=window.document.location.href;
+        let pathName=window.document.location.pathname;
+        let pos=curWwwPath.indexOf(pathName);
+        let kilocalhostPath=curWwwPath.substring(0,pos);
+        window.open(localhostPath+"/pdfjs/web/viewer.html?file="+attachmentUrl + "/preview?fileName=%3Dtest.pdf");
+
     }
 </script>

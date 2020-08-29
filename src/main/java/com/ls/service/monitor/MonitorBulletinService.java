@@ -3,7 +3,11 @@ package com.ls.service.monitor;
 import com.baomidou.mybatisplus.service.IService;
 import com.ls.entity.monitor.MonitorBulletin;
 
+import java.io.File;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.List;
+import java.util.Map;
 
 public interface MonitorBulletinService extends IService<MonitorBulletin> {
 
@@ -14,4 +18,6 @@ public interface MonitorBulletinService extends IService<MonitorBulletin> {
     Integer getCount(MonitorBulletin monitorBulletin);
 
     boolean booleanByBulletin(Long eventId);
+
+    File createBulletin(Map data);
 }

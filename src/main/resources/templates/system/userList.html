@@ -86,27 +86,7 @@
 
 
 
-    //删除弹框
-    function swalDelUser(userId) {
-        swal({
-                title: "确定删除吗？",
-                text: "删除后你将无法恢复该条信息！",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "确定删除！",
-                cancelButtonText: "取消删除！",
-                closeOnConfirm: false,
-                closeOnCancel: false
-            },
-            function(isConfirm){
-                if (isConfirm) {
-                    delUser(userId)
-                }else{
-                    swal("取消成功！", "","success");
-                }
-            });
-    }
+
 
     //删除
     function delUser(userId) {

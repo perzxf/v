@@ -7,7 +7,7 @@
     }
 </style>
 <!--页面中心内容-->
-<div class="col-sm-10">
+<div class="col-sm-10" xmlns:th="http://www.thymeleaf.org">
     <!--页头-->
     <div class="page-header" style="margin-top: -20px;margin-bottom: 5px">
         <h1>个人信息</h1>
@@ -19,37 +19,37 @@
             <div class="form-group">
                 <label for="nickName" class="col-sm-2 control-label">昵称</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control userInput" id="nickName" placeholder="请输入昵称">
+                    <input type="text" class="form-control userInput" id="nickName" th:value="${session.currentUser.nickName}" placeholder="请输入昵称" >
                 </div>
             </div>
             <div class="form-group">
                 <label for="userName" class="col-sm-2 control-label">用户名</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control userInput" id="userName"  placeholder="请输入用户名">
+                    <input type="text" class="form-control userInput" id="userName" th:value="${session.currentUser.userName}" placeholder="请输入用户名">
                 </div>
             </div>
             <div class="form-group">
                 <label for="cellPhone" class="col-sm-2 control-label">手机号</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control userInput" id="cellPhone"  placeholder="请输入手机号">
+                    <input type="text" class="form-control userInput" id="cellPhone" th:value="${session.currentUser.cellPhone}" placeholder="请输入手机号">
                 </div>
             </div>
             <div class="form-group">
                 <label for="email" class="col-sm-2 control-label">邮箱</label>
                 <div class="col-sm-10">
-                    <input type="email" class="form-control userInput" id="email"  placeholder="请输入邮箱">
+                    <input type="email" class="form-control userInput" id="email" th:value="${session.currentUser.email}" placeholder="请输入邮箱">
                 </div>
             </div>
             <div class="form-group">
                 <label for="company" class="col-sm-2 control-label">公司</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control userInput" id="company"  placeholder="请输入公司名">
+                    <input type="text" class="form-control userInput" id="company" th:value="${session.currentUser.company}" placeholder="请输入公司名">
                 </div>
             </div>
             <div class="form-group">
                 <label for="remark" class="col-sm-2 control-label">备注</label>
                 <div class="col-sm-10">
-                    <textarea class="form-control userInput" rows="3" id="remark" ></textarea>
+                    <textarea class="form-control userInput" rows="3" id="remark" th:text="${session.currentUser.remark}"></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -63,3 +63,4 @@
         </form>
     </div>
 </div>
+
