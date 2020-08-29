@@ -4,6 +4,7 @@ import com.ls.common.ConstantConfig;
 import com.ls.entity.system.SysUser;
 import com.ls.service.system.SysUserService;
 import com.ls.utils.Md5Util;
+import com.ls.utils.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -76,7 +77,46 @@ public class SysUserController {
         return map;
     }
 
+    /**
+     * 删除用户   逻辑删除 == 删除数据库
+     * @param userId
+     * @return
+     */
+    @PostMapping("/del")
+    @ResponseBody
+    public Map<String, Object> userDel(Long userId){
+        Map<String, Object> map = new HashMap<>();
 
+        Map<String, Object> delMap = new HashMap<>();
+        delMap.put("user_id",userId);
+        boolean bool = userService.deleteByMap(delMap);
+        map.put("success",bool);
+        return map;
+    }
 
+    /**
+     * 用户添加
+     * @param user
+     * @return
+     */
+    @PostMapping("/add")
+    @ResponseBody
+    public Map<String, Object> userAdd(SysUser user){
+        Map<String, Object> map = new HashMap<>();
+        if(user == null){
+            map.put("success",false);
+            map.put("msg","用户信息为空！");
+        }else{
+            if(StringUtil.isEmpty(user.getUserName()) || StringUtil.isEmpty(user.getPassword()) ){
+                map.put("success",false);
+                map.put("msg","用户名或密码为空！");
+            }else{
+                userService.saveUser(user);
+                map.put("success", true);
+                map.put("msg", "用户新增成功！");
+            }
+        }
+        return map;
+    }
 
 }
