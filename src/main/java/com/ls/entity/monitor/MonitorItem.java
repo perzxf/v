@@ -41,6 +41,8 @@ public class MonitorItem {
     private Date createDate;
 
 
+    private transient String userName;
+
     public Long getMonitorId() {
         return monitorId;
     }
@@ -87,5 +89,13 @@ public class MonitorItem {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }
