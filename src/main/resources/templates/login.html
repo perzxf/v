@@ -28,7 +28,7 @@
         <div class="login-center clearfix">
             <div class="login-center-img"><img src="/assets/image/password.png"/></div>
             <div class="login-center-input">
-                <input type="password" name="password" id="password" placeholder="请输入您的密码" onfocus="this.placeholder=''" onblur="this.placeholder='请输入您的密码'"/>
+                <input type="password" name="password" id="password" placeholder="请输入您的密码" onfocus="this.placeholder=''" onblur="this.placeholder='请输入您的密码'"  onkeydown="key()"/>
                 <div class="login-center-input-text">密码</div>
             </div>
         </div>
@@ -116,5 +116,35 @@
             }
         })
     };
+
+    //键盘回车登陆
+    function key(e){
+        let  ev = e||event;
+        if (ev.keyCode==13){
+            //判断用户名和密码信息
+            let username = $("#username").val();
+            let password = $("#password").val();
+            if(!username){
+                swal("请输入用户名！！！","","error")
+            }else if(!password){
+                swal("请输入密码！！！","","error")
+            } else{
+                addClass(document.querySelector(".login"), "active")
+                setTimeout(function(){
+                    addClass(document.querySelector(".sk-rotating-plane"), "active")
+                    document.querySelector(".login").style.display = "none"
+                },800);
+                setTimeout(function(){
+                    removeClass(document.querySelector(".login"), "active")
+                    removeClass(document.querySelector(".sk-rotating-plane"), "active")
+                    document.querySelector(".login").style.display = "block"
+                },3000);
+                //发送请求到后台
+                submitLogin(username,password);
+            }
+        }
+    }
+
+
 </script>
 </html>
