@@ -12,4 +12,10 @@ public interface SysSiteService extends IService<SysSite> {
     Integer getCount(SysSite sysSite);
 
     List<SysSite> getSiteList();
+
+    List<SysSite> getSiteListUniq();
+
+    Integer addSite(SysSite sysSite);
+
+    Integer delSite(Long siteId);
 }

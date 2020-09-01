@@ -52,4 +52,21 @@ public class SysSiteServiceImpl extends ServiceImpl<SysSiteMapper, SysSite> impl
         return baseMapper.selectList(wrapper);
     }
 
+    @Override
+    public List<SysSite> getSiteListUniq() {
+        Wrapper<SysSite> wrapper = new EntityWrapper<>();
+        wrapper.setSqlSelect("DISTINCT site_type_id");
+        return baseMapper.selectList(wrapper);
+    }
+
+    @Override
+    public Integer addSite(SysSite sysSite) {
+        return null;
+    }
+
+    @Override
+    public Integer delSite(Long siteId) {
+        return null;
+    }
+
 }
