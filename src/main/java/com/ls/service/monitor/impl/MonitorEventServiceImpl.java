@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.ls.common.RedisCacheKey;
+import com.ls.common.SiteTypeEnum;
 import com.ls.entity.monitor.MonitorEvent;
 import com.ls.mapper.monitor.MonitorEventMapper;
 import com.ls.service.monitor.MonitorEventService;
@@ -46,7 +47,9 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
     @Override
     public List<MonitorEvent> getEventList(Long monitorId) {
         Wrapper<MonitorEvent> wrapper = new EntityWrapper<>();
-        wrapper.eq("monitor_id", monitorId);
+        if(monitorId != null){
+            wrapper.eq("monitor_id", monitorId);
+        }
         return baseMapper.selectList(wrapper);
     }
 
@@ -61,8 +64,12 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
     @Override
     public Integer getPieEventCount(Long monitorId, Long siteTypeId) {
         Wrapper<MonitorEvent> wrapper = new EntityWrapper<>();
-        wrapper.eq("monitor_id", monitorId);
-        wrapper.eq("site_type_id", siteTypeId);
+        if(monitorId != null){
+            wrapper.eq("monitor_id", monitorId);
+        }
+        if(siteTypeId != null){
+            wrapper.eq("site_type_id", siteTypeId);
+        }
         Integer count = baseMapper.selectCount(wrapper);
         return count;
     }
@@ -104,12 +111,16 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
         return id.longValue();
     }
 
+    /**
+     * 微信数据添加
+     * @param events
+     */
     @Override
     public void saveWeChatEvent(List<MonitorEvent> events) {
         Long redisMonitorId = getRedisMonitor();
         for (MonitorEvent event:events){
             event.setMonitorId(redisMonitorId);
-            event.setSiteTypeId(5l); //网站数据类型
+            event.setSiteTypeId(SiteTypeEnum.WEI_XIN.getExpire()); //网站数据类型
             String link = "https://weixin.sogou.com"+event.getEventUrl();
             //判断记录是否已存在
             List<MonitorEvent> list = selectInfo(event);
@@ -127,12 +138,16 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
         }
     }
 
+    /**
+     * 搜狗新闻数据添加
+     * @param events
+     */
     @Override
     public void saveSouHuNewsEvent(List<MonitorEvent> events) {
         Long redisMonitorId = getRedisMonitor();
         for (MonitorEvent event:events){
             event.setMonitorId(redisMonitorId);
-            event.setSiteTypeId(8l); //网站数据类型
+            event.setSiteTypeId(SiteTypeEnum.NEWS.getExpire()); //网站数据类型
 
             //判断记录是否已存在
             List<MonitorEvent> list = selectInfo(event);
@@ -153,12 +168,16 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
         }
     }
 
+    /**
+     * 知乎数据添加
+     * @param events
+     */
     @Override
     public void saveZhiHuEvent(List<MonitorEvent> events) {
         Long redisMonitorId = getRedisMonitor();
         for (MonitorEvent event:events){
             event.setMonitorId(redisMonitorId);
-            event.setSiteTypeId(7l); //网站数据类型
+            event.setSiteTypeId(SiteTypeEnum.ZHI_HU.getExpire()); //网站数据类型
             String link = "https://www.sogou.com"+event.getEventUrl();
             //判断记录是否已存在
             List<MonitorEvent> list = selectInfo(event);
@@ -176,12 +195,16 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
         }
     }
 
+    /**
+     * 百度贴吧数据添加
+     * @param events
+     */
     @Override
     public void saveTieBaEvent(List<MonitorEvent> events) {
         Long redisMonitorId = getRedisMonitor();
         for (MonitorEvent event:events){
             event.setMonitorId(redisMonitorId);
-            event.setSiteTypeId(2l); //网站数据类型
+            event.setSiteTypeId(SiteTypeEnum.TIE_BA.getExpire()); //网站数据类型
             String link = "https://tieba.baidu.com"+event.getEventUrl();
             //判断记录是否已存在
             List<MonitorEvent> list = selectInfo(event);
@@ -199,12 +222,16 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
         }
     }
 
+    /**
+     * 天涯论坛数据添加
+     * @param events
+     */
     @Override
     public void saveTianYaEvent(List<MonitorEvent> events) {
         Long redisMonitorId = getRedisMonitor();
         for (MonitorEvent event:events){
             event.setMonitorId(redisMonitorId);
-            event.setSiteTypeId(3l); //网站数据类型
+            event.setSiteTypeId(SiteTypeEnum.LUN_TAN.getExpire()); //网站数据类型
 //            String link = "https://tieba.baidu.com"+event.getEventUrl();
             //判断记录是否已存在
             List<MonitorEvent> list = selectInfo(event);
@@ -222,12 +249,16 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
         }
     }
 
+    /**
+     * 新浪新闻数据添加
+     * @param events
+     */
     @Override
     public void saveSinaNewsEvent(List<MonitorEvent> events) {
         Long redisMonitorId = getRedisMonitor();
         for (MonitorEvent event:events){
             event.setMonitorId(redisMonitorId);
-            event.setSiteTypeId(4l); //网站数据类型
+            event.setSiteTypeId(SiteTypeEnum.NEWS.getExpire()); //网站数据类型
 //            String link = "https://tieba.baidu.com"+event.getEventUrl();
             //判断记录是否已存在
             List<MonitorEvent> list = selectInfo(event);
@@ -245,12 +276,16 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
         }
     }
 
+    /**
+     * 今日头条数据添加
+     * @param events
+     */
     @Override
     public void saveTouTiaoEvent(List<MonitorEvent> events) {
         Long redisMonitorId = getRedisMonitor();
         for (MonitorEvent event:events){
             event.setMonitorId(redisMonitorId);
-            event.setSiteTypeId(6l); //网站数据类型
+            event.setSiteTypeId(SiteTypeEnum.TOU_TIAO.getExpire()); //网站数据类型
 //            String link = "https://tieba.baidu.com"+event.getEventUrl();
             //判断记录是否已存在
 //            List<MonitorEvent> list = selectInfo(event);

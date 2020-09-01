@@ -37,4 +37,10 @@ public class ConstantConfig {
     public final static Integer EVENT_TYPE_NEGATIVE = -1; //事件类型 负面
     public final static Integer EVENT_TYPE_NEUTRAL = 0; //事件类型 中性
     public final static Integer EVENT_TYPE_POSITIVE = 1; //事件类型 正面
+
+
+    /**
+     * 微信公众号发消息模板
+     */
+    public static final String TEXT_STR = "V楼市监测一条预警信息。【点击查看】：<a href='%s'>%s</a>";
 }

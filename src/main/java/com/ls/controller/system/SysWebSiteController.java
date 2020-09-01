@@ -1,7 +1,7 @@
 package com.ls.controller.system;
 
 import com.ls.entity.system.SysSite;
-import com.ls.service.system.SysWebSiteService;
+import com.ls.service.system.SysSiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class SysWebSiteController {
 
     @Autowired
-    private SysWebSiteService webSiteService;
+    private SysSiteService webSiteService;
 
     @PostMapping("/website/add")
     @ResponseBody
