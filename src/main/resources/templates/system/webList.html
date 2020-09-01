@@ -19,13 +19,13 @@
             <div role="tabpanel" class="tab-pane active" id="home">
                 <div class="panel panel-default">
                     <div class="panel-body text-center">
-                        <form class="form-inline">
-                            <div class="form-group">
-                                <label for="nickName">网站名称</label>
-                                <input type="text" class="form-control" id="nickName" placeholder="请输入网站名称">
-                            </div>
-                            <button type="submit" class="btn btn-primary">搜索</button>
-                        </form>
+<!--                        <form class="form-inline">-->
+<!--                            <div class="form-group">-->
+<!--                                <label for="nickName">网站名称</label>-->
+<!--                                <input type="text" class="form-control" id="nickName" placeholder="请输入网站名称">-->
+<!--                            </div>-->
+<!--                            <button type="submit" class="btn btn-primary">搜索</button>-->
+<!--                        </form>-->
                     </div>
                     <div class="row">
                         <div class="col-sm-10 col-sm-offset-1">
@@ -35,7 +35,53 @@
                     </div>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-pane" id="profile">用来处理网站户添加</div>
+            <div role="tabpanel" class="tab-pane" id="profile">
+
+                <form class="form-horizontal" id="siteForm">
+                    <div class="form-group">
+                        <label for="siteName" class="col-sm-2 control-label">网站名称</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="siteName" name="siteName" placeholder="请输入网站名称">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="siteUrl" class="col-sm-2 control-label">网站网址</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="siteUrl" name="siteUrl" placeholder="请输入网站网址">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="siteType" class="col-sm-2 control-label">网站类型</label>
+                        <div class="col-sm-6">
+                            <select class="form-control"  id="siteType" name="siteType">
+                                <option>--请选择--</option>
+                                <option>新闻网站</option>
+                                <option>微博</option>
+                                <option>贴吧</option>
+                                <option>论坛</option>
+                                <option>今日头条</option>
+                                <option>知乎</option>
+                                <option>微信</option>
+                                <option>其他</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="remark" class="col-sm-2 control-label">备注</label>
+                        <div class="col-sm-6">
+                            <textarea class="form-control" rows="3"  id="remark" name="remark"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-6">
+                            <button type="button" class="btn btn-primary" onclick="addSite()">添加</button>
+                        </div>
+                    </div>
+                </form>
+
+
+
+            </div>
         </div>
     </div>
 </div>
@@ -59,19 +105,119 @@
                 {name: "siteId", align: "center", editable: true, hidden: true,search:false},
                 {name: "siteName", align: "center", editable: true},
                 {name: "siteUrl", align: "center", editable: true},
-                {name: "siteTypeId", align: "center", editable: true},
+                {name: "siteTypeId", align: "center", editable: true,
+                    formatter:function(cellvalue, options, rowObject){
+                        let typeName = "其他";
+                        switch (rowObject.siteTypeId) {
+                            case 1:
+                                typeName = "新闻网站";
+                                break;
+                            case 2:
+                                typeName = "微博";
+                                break;
+                            case 3:
+                                typeName = "贴吧";
+                                break;
+                            case 4:
+                                typeName = "论坛";
+                                break;
+                            case 5:
+                                typeName = "今日头条";
+                                break;
+                            case 6:
+                                typeName = "知乎";
+                                break;
+                            case 7:
+                                typeName = "微信";
+                                break;
+                            case 8:
+                                typeName = "其他";
+                                break;
+                        }
+                        return '<span>'+typeName+'</span>'
+                    }
+
+                },
                 {name: "remark", align: "center", editable: true},
                 {name: "createDate", align: "center", editable: true},
                 {name:"caozuo",align:"center", editable: false,search:false,
                     formatter:function(cellvalue, options, rowObject){
                         //console.log(rowObject.userId);
-                        return '<a class="btn btn-danger" onclick="swalDelUser(\''+rowObject.siteId+'\')">删除</a>'
+                        return '<a class="btn btn-danger" onclick="delSiteweb(\''+rowObject.siteId+'\')">删除</a>'
                     }}
             ],
             pager: "#pager",    //用来指定分页工具栏标签的id
             rowNum: 10,  //用来指定每页显示记录数
             rowList: [5, 10, 15, 20],  //用来指定下拉列表中每页显示条数
             viewrecords: true , //用来显示总记录数
+        });
+    }
+
+    function addSite() {
+        let siteName = $("#siteName").val();
+        let siteUrl = $("#siteUrl").val();
+        let siteType = $("#siteType").val();
+        let remark = $("#remark").val();
+        let map = new Map();
+        map.set("新闻网站",1);
+        map.set("微博",2);
+        map.set("贴吧",3);
+        map.set("论坛",4);
+        map.set("今日头条",5);
+        map.set("知乎",6);
+        map.set("微信",7);
+        map.set("其他",8);
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/system/website/add",
+            data: {
+                siteName : siteName,
+                siteUrl : siteUrl,
+                siteTypeId : map.get(siteType),
+                remark : remark
+            },
+            success: function (res) {
+                $("#siteList").jqGrid('clearGridData');//清空表格内的数据
+                $("#siteList").jqGrid("setGridParam",{  //重新加载表格内数据
+                    url:"/site/findAll",  //发送请求地址
+                    datatype:"json",     //接收参数格式
+                    type:"get"           //发送参数方法
+                }).trigger("reloadGrid"); //重新加载表格
+                if(res.success){
+                    swal(res.msg,"","error");
+                }else{
+                    swal(res.msg,"","success");
+                }
+            }
+        });
+        document.getElementById("siteForm").reset();
+    }
+
+    function delSiteweb(siteId) {
+
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "/system/website/del?siteId="+siteId,
+
+            success: function (res) {
+
+
+                $("#siteList").jqGrid('clearGridData');//清空表格内的数据
+                $("#siteList").jqGrid("setGridParam",{  //重新加载表格内数据
+                    url:"/site/findAll",  //发送请求地址
+                    datatype:"json",     //接收参数格式
+                    type:"get"           //发送参数方法
+                }).trigger("reloadGrid"); //重新加载表格
+                if(res.success){
+
+                    swal(res.msg,"","error");
+                }else{
+                    swal(res.msg,"","success");
+                }
+            }
         });
     }
 

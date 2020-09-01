@@ -80,7 +80,7 @@ public class MonitorBulletinServiceImpl extends ServiceImpl<MonitorBulletinMappe
     public File createBulletin(Map data) {
 
         Writer out = null;
-        File file = new File(System.getProperty("user.dir")+"/src/main/resources/temp/"+ RandomUtils.string(15) +".docx");
+        File file = new File(System.getProperty("user.dir")+"/src/main/resources/temp/"+ RandomUtils.string(15) +".doc");
         cfg.setClassForTemplateLoading(this.getClass(),"/templates/ftl");
         cfg.setEncoding(Locale.CHINESE,"utf-8");
         cfg.setObjectWrapper(new DefaultObjectWrapper());
