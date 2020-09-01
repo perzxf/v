@@ -11,11 +11,10 @@ import com.ls.service.monitor.MonitorBulletinService;
 import com.ls.service.monitor.MonitorEventService;
 import com.ls.service.monitor.MonitorItemService;
 import com.ls.service.system.SysUserService;
+import com.ls.utils.WeChatUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -88,13 +87,17 @@ public class MonitorController {
     @Autowired
     private MonitorBulletinService bulletinService;
 
+    @Autowired
+    private WeChatUtil weChatUtil;
+
     /**
      * 定时发送邮件
      * 循环获取项目数据表
      * 判断：处理状态未处理，事件类型负面
      * 发送邮件  同时把处理状态改成已处理，并把当前数据添加到简报中
      */
-    @Scheduled(cron = "0 0 10,14,18 * * ?")  //每天上午10点，下午2点，6点
+//    @Scheduled(cron = "0 27 10,14,17,21 * * ?")
+    @Scheduled(cron = "0 0 10,14,18,21 * * ?")  //每天上午10点，下午2点，6点,晚上9点
 //    @Scheduled(cron = "0 0 0 */1 * ?")   //每天凌晨0点执行一次
     public void sendCronMail() {
         log.info("开始执行定时任务: "+new Date().toLocaleString());
@@ -120,6 +123,11 @@ public class MonitorController {
                                     "</html>";
                     //发送邮件
                     mailService.sendMail(user.getEmail(),"舆情监测预警提醒",content);
+
+                    //发送微信到公众号里面
+                    String format_str = String.format(ConstantConfig.TEXT_STR,event.getEventUrl(),event.getEventTitle() );
+                    weChatUtil.sendText("",user.getOpenId(),format_str);
+
                     //当前数据添加到简报中
                     if(bulletinService.booleanByBulletin(event.getEventId())){
                         //加入简报数据
