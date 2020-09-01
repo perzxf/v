@@ -16,8 +16,22 @@
         </ul>
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="home">
-                <div id="main" style="height:500px;"></div>
-                <div id="pieChart" style="height:500px;"></div>
+<!--                <div id="main" style="height:500px;"></div>-->
+<!--                <div id="pieChart" style="height:500px;"></div>-->
+                <!--数据分析-->
+                <div class="panel panel-default">
+                    <div class="panel-heading"><span class="glyphicon glyphicon-send"></span> 数据分析</div>
+                    <div class="panel-body" style=" height: 300px;">
+                        <div id="container-line" style="height: 100%"></div>
+                    </div>
+                </div>
+                <!--媒体分析-->
+                <div class="panel panel-default">
+                    <div class="panel-heading"><span class="glyphicon glyphicon-send"></span> 媒体分析</div>
+                    <div class="panel-body" style=" height: 300px;">
+                        <div id="container-pie" style="height: 100%"></div>
+                    </div>
+                </div>
             </div>
             </div>
         </div>
@@ -27,14 +41,14 @@
 
     $(function () {
         //页面加载折线图
-        histogramEcharts();
+        // histogramEcharts();
         //页面加载饼状图
         pieECharts();
     });
 
     function pieECharts(){
 
-        let textData = ['新浪微博', '百度贴吧', '天涯论坛', '新浪新闻', '微信公众号','今日头条','知乎','搜狗新闻'];
+        let textData = ['新闻网站', '微博', '贴吧', '论坛', '今日头条','知乎','微信公众号','其他']
         let seriesData = new Array();
 
         $.ajax({
@@ -43,20 +57,23 @@
             datatype : 'json',
             success : function(res) {
                 if(res.success){
-
+                    // debugger;
                     const countList = res.countList;
                     for(let i=0; i< countList.length; i++ ){
                         let data = {};
-                        data.value = countList[i];
-                        data.name = textData[i];
+                        let map = countList[i];
+                        for (let key in map){
+                            data.value =  map[key];
+                            data.name = key;
+                        }
                         seriesData.push(data);
                     }
-                    let dom = document.getElementById("pieChart");
+                    let dom = document.getElementById("container-pie");
                     let myChart = echarts.init(dom);
 
                     let option = {
                         title: {
-                            text: '数据来源图',
+                            text: '数据媒体来源图',
                             left: 'center'
                         },
                         tooltip: {
@@ -70,7 +87,7 @@
                         },
                         series: [
                             {
-                                name: '访问来源',
+                                name: '媒体来源',
                                 type: 'pie',
                                 radius: '55%',
                                 center: ['50%', '60%'],
