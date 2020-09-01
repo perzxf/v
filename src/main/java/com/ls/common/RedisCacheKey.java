@@ -4,13 +4,14 @@ public enum RedisCacheKey {
 
     OPENID("openid","微信用户唯一openid","String",-1),
     MONITOR("monitor","项目信息","String",-1),
+    ACCESS_TOKEN("access_token","公众号的全局唯一接口调用凭据","String",-1),
             ;
 
 
 
 
 
-    private RedisCacheKey(String type, String desc, String dataType, int expire) {
+    RedisCacheKey(String type, String desc, String dataType, int expire) {
         this.type = type;
         this.desc = desc;
         this.dataType = dataType;
