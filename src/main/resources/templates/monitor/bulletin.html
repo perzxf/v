@@ -56,7 +56,7 @@
             colModel: [
                 {name: "bulletinId", align: "center", editable: true,search:false,
                     formatter:function(cellvalue, options, rowObject){
-                        return '<input type="" value=\''+rowObject.bulletinId+'\'>'
+                        return '<span type="" value=\''+rowObject.bulletinId+'\'/>'
                     }},
                 {name: "eventTitle", align: "center", editable: true},
                 {name:"caozuo",align:"center", editable: false,search:false,
@@ -118,12 +118,31 @@
         // let filePath= "PDFDemo.pdf";
         // window.location.href = "/assets/pdfjs/web/viewer.html?file=file.pdf";
         // window.open("assets/pdfjs/web/viewer.html?file=../PDFDemo.pdf");
-
+        // $.ajax({
+        //     url : "/monitor/bulletin/show",    //后台controller中的请求路径
+        //     type : 'GET',
+        //     data:{
+        //         bulletinId: bulletinId,
+        //         monitorId: monitorId,
+        //         eventId: eventId
+        //     },
+        //     datatype : 'json',
+        //     success : function(res) {
+        //         if(res.success){
+        //             swal(res.msg,'','success');
+        //         }else{
+        //             swal(res.msg,'','error');
+        //         }
+        //     },
+        //     error : function() {
+        //         swal('监测出错','','error');
+        //     }
+        // });
         let curWwwPath=window.document.location.href;
         let pathName=window.document.location.pathname;
         let pos=curWwwPath.indexOf(pathName);
-        let kilocalhostPath=curWwwPath.substring(0,pos);
-        window.open(localhostPath+"/pdfjs/web/viewer.html?file="+attachmentUrl + "/preview?fileName=%3Dtest.pdf");
+        let localhostPath=curWwwPath.substring(0,pos);
+        window.open(localhostPath+"/assets/pdfjs/web/viewer.html?file="+"D:\\IdeaProjects3\\github\\v\\src\\main\\resources\\temp\\GJDPKhCbJ2ebrPb.pdf");
 
     }
 </script>
