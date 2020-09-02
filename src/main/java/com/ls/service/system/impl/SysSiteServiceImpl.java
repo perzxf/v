@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -61,12 +62,16 @@ public class SysSiteServiceImpl extends ServiceImpl<SysSiteMapper, SysSite> impl
 
     @Override
     public Integer addSite(SysSite sysSite) {
-        return null;
+        Date createDate = new Date();
+        sysSite.setCreateDate(createDate);
+        Integer integer = baseMapper.insert(sysSite);
+        return integer;
     }
 
     @Override
     public Integer delSite(Long siteId) {
-        return null;
+        Integer integer = baseMapper.deleteById(siteId);
+        return integer;
     }
 
 }
