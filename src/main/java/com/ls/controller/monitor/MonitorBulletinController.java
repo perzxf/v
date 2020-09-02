@@ -76,7 +76,7 @@ public class MonitorBulletinController {
 
     @PostMapping("/monitor/bulletin/create")
     @ResponseBody
-    public File createBulletin(Long bulletinId,Long monitorId,Long eventId){
+    public File createBulletin(Long monitorId,Long eventId){
 
         Map<String,Object> data = new HashMap<>();
 
@@ -89,7 +89,7 @@ public class MonitorBulletinController {
         data.put("badCount",0);
         data.put("otherCount",1);
         List<String[]> cellgrids = new ArrayList<>();
-        cellgrids.add(new String[]{"1",monitorEvent.getEventTitle(),DateUtil.formatDate(monitorEvent.getEventDate(),"yyyy-MM-dd"),monitorEvent.getEventUrl()});
+        cellgrids.add(new String[]{monitorEvent.getEventTitle(),monitorEvent.getEventUrl(),DateUtil.formatDate(monitorEvent.getEventDate(),"yyyy-MM-dd")});
         data.put("cellgrids",cellgrids);
         data.put("time", DateUtil.formatDate(new Date(),"yyyy-MM-dd"));
         File bulletin = bulletinService.createBulletin(data);
