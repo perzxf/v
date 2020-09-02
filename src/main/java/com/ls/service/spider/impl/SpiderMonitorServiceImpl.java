@@ -28,39 +28,44 @@ public class SpiderMonitorServiceImpl implements SpiderMonitorService {
     public void spiderMonitor(Long siteTypeId, String siteUrl, List<String> keyList) {
 
         int  siteType = siteTypeId.intValue();
+
+        /**
+         * [1,'新闻网站', 2,'微博', 3,'贴吧', 4,'论坛', 5,'今日头条',6,'知乎',7,'微信公众号',8,'其他']
+         */
+
         for (String key:keyList){
 
             switch (siteType) {
                 case 1:
-                    System.out.println("微博");
+                    System.out.println("新闻网站");
+                    getSinaNewsInfo(siteUrl,key);  //新浪新闻
+                    getSouHuNewsInfo(siteUrl,key); //搜狐新闻
                     break;
                 case 2:
-                    System.out.println("百度贴吧");
-                    getTieBaInfo(siteUrl,key);
+                    System.out.println("微博");
                     break;
                 case 3:
-                    System.out.println("天涯论坛");
-                    getTianYaInfo(siteUrl,key);
+                    System.out.println("贴吧");
+                    getTieBaInfo(siteUrl,key);
                     break;
                 case 4:
-                    System.out.println("新浪新闻");
-                    getSinaNewsInfo(siteUrl,key);
+                    System.out.println("论坛");
+                    getTianYaInfo(siteUrl,key);
                     break;
                 case 5:
-                    System.out.println("搜狗微信公众号");
-                    getWeChatInfo(siteUrl,key);
-                    break;
-                case 6:
                     System.out.println("今日头条");
                     getTouTiaoInfo(siteUrl,key);
                     break;
-                case 7:
-                    System.out.println("搜狗知乎");
+                case 6:
+                    System.out.println("知乎");
                     getZhiHuInfo(siteUrl,key);
                     break;
+                case 7:
+                    System.out.println("微信公众号");
+                    getWeChatInfo(siteUrl,key);
+                    break;
                 case 8:
-                    System.out.println("搜狗新闻");
-                    getSouHuNewsInfo(siteUrl,key);
+                    System.out.println("其他");
                     break;
             }
 

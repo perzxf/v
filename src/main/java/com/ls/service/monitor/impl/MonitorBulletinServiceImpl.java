@@ -96,6 +96,8 @@ public class MonitorBulletinServiceImpl extends ServiceImpl<MonitorBulletinMappe
             template.process(data,out);
 
             out.flush();
+
+
         }catch (Exception e){
             e.printStackTrace();
         }finally {

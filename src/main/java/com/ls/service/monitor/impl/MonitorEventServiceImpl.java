@@ -18,7 +18,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @Service
@@ -49,7 +51,19 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
         Wrapper<MonitorEvent> wrapper = new EntityWrapper<>();
         if(monitorId != null){
             wrapper.eq("monitor_id", monitorId);
+
+            //时间搜索  当天时间往前推15天
+            Date date = new Date();
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(date);
+            calendar.add(calendar.DAY_OF_WEEK, -15);
+            wrapper.ge("event_date",calendar.getTime());
+            wrapper.le("event_date",date);
+
         }
+
+        wrapper.orderBy("event_date", true); // 按照创建时间排序
+
         return baseMapper.selectList(wrapper);
     }
 
@@ -86,6 +100,14 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
         wrapper.ge("event_id",1); //userId 大于等于1
         if(item != null){
             wrapper.eq("monitor_id", item.getMonitorId()); // 精确查询
+            //时间搜索  当天时间往前推15天
+            Date date = new Date();
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(date);
+            calendar.add(calendar.DAY_OF_WEEK, -15);
+            wrapper.ge("event_date",calendar.getTime());
+            wrapper.le("event_date",date);
+
         }
         wrapper.orderBy("create_date", false); // 按照创建时间倒序排序
 
@@ -99,6 +121,13 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
         Wrapper<MonitorEvent> wrapper = new EntityWrapper<>();
         if(item != null){
             wrapper.eq("monitor_id", item.getMonitorId()); // 精确查询
+            //时间搜索  当天时间往前推15天
+            Date date = new Date();
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(date);
+            calendar.add(calendar.DAY_OF_WEEK, -15);
+            wrapper.ge("event_date",calendar.getTime());
+            wrapper.le("event_date",date);
         }
         Integer count = baseMapper.selectCount(wrapper);
         log.info("查询到用户信息一共{}条",count);

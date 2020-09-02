@@ -44,16 +44,17 @@
         }
         .nav-childlink {
             font-size: 16px;
-            color: ;
             padding: 15px 0 0 25px;
         }
-
+        .link-panel{
+            background-color: #1b6d8540;
+        }
     </style>
 
 </head>
 <body>
 <!--导航条-->
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -113,7 +114,7 @@
 <!--            </div>-->
 
             <!--菜单样式2-->
-            <div class="nav-link" th:each="menu : ${menus}" role="tablist">
+            <div class="nav-link link-panel" th:each="menu : ${menus}" role="tablist">
                 <ul class="nav nav-pills nav-stacked ">
                     <li class="" role="presentation" id="">
                         <h5>
@@ -123,7 +124,7 @@
                         </h5>
 
                         <div class="" id="listgroup"  role="tablist">
-                            <ul class="nav nav-list nav-childlink collapse " th:id="${menu.menuId}">
+                            <ul class="nav nav-list nav-childlink collapse in" th:id="${menu.menuId}">
                                 <li class="" role="presentation"  th:each="cmenu : ${menu.children}">
                                     <a  class="" th:id="${cmenu.url}"  onclick="load(this.id)" style="color:#8F9396 "><span th:text="${cmenu.menuName}">
 

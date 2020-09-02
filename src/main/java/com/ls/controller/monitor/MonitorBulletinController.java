@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.File;
-import java.io.StringWriter;
 import java.util.*;
 
 @Controller
@@ -80,9 +79,11 @@ public class MonitorBulletinController {
 
         Map<String,Object> data = new HashMap<>();
 
-
+        //查询数据
         MonitorEvent monitorEvent = eventService.getEventById(eventId);
+        //查询项目
         MonitorItem monitorItem = itemService.getMonitorItemById(monitorId);
+
         data.put("monitorName",monitorItem.getMonitorName());
         data.put("totalCount",1);
         data.put("goodCount",0);

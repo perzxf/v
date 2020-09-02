@@ -43,10 +43,10 @@ public class EchartController {
      */
      @GetMapping("/chart/histogram")
      @ResponseBody
-     public Map<String,Object> histogramEcharts(){
+     public Map<String,Object> histogramEcharts(Long monitorId){
 
           Map<String,Object> map = new HashMap<>();
-          Long monitorId = 2l;
+//          Long monitorId = 2l;
           List<MonitorEvent> events = eventService.getEventList(monitorId);
          if(events!=null && !events.isEmpty()){
              List<String>  dateList  = new ArrayList<>();
@@ -60,7 +60,6 @@ public class EchartController {
                      countList.add(count);
                  }
              }
-
 
              map.put("success",true);
              map.put("dateList",dateList);   //时间

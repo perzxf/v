@@ -26,6 +26,7 @@ public class MonitorEventController {
 
         MonitorEvent monitorEvent = new MonitorEvent();
         monitorEvent.setMonitorId(monitorId);
+
         //当前页数据
         List<MonitorEvent> lists = eventService.selectEventList(monitorEvent,page, rows);
         //总条数

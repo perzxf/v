@@ -18,6 +18,14 @@
             <div role="tabpanel" class="tab-pane active" id="home">
 <!--                <div id="main" style="height:500px;"></div>-->
 <!--                <div id="pieChart" style="height:500px;"></div>-->
+                <div class="panel-body text-center">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label for="monitorId">项目选择：</label>
+                            <select class="selectpicker" id="monitorId" name="monitorId" ></select>
+                        </div>
+                    </form>
+                </div>
                 <!--数据分析-->
                 <div class="panel panel-default">
                     <div class="panel-heading"><span class="glyphicon glyphicon-send"></span> 数据分析</div>
@@ -44,7 +52,53 @@
         // histogramEcharts();
         //页面加载饼状图
         pieECharts();
+        $('.selectpicker').selectpicker({
+            noneSelectedText : '请选择'    //默认显示内容
+        });
+        //初始化刷新数据
+        $(window).on('load', function() {
+            $('.selectpicker').selectpicker('val', '');
+            $('.selectpicker').selectpicker('refresh');
+        });
+        loadParkdata();    //执行此函数，从后台获取数据，拼接成option标签，添加到select的里面
     });
+
+    function loadParkdata(){
+        $.ajax({
+            url : "/monitor/item/listpark",    //后台controller中的请求路径
+            type : 'GET',
+            async : false,
+            datatype : 'json',
+            success : function(res) {
+                if(res.success){
+                    const data = res.data;
+                    const parknames = $("#monitorId");
+                    for(let i=0; i< data.length; i++ ){
+                        let parkdata = data[i];
+                        //拼接成多个<option><option/>
+                        parknames.append('<option value="'+parkdata.monitorId+'">'+parkdata.monitorName+'</option>')
+                    }
+                    $('.selectpicker').selectpicker('val', '');
+                    $('.selectpicker').selectpicker('refresh');
+                }
+            },
+            error : function() {
+                alert('查询名称出错');
+            }
+        });
+    }
+
+    $("#monitorId").on("change",function () {
+
+        for(let i=0; i< 10; i++ ) {
+            const monitorId = $('#monitorId').val();
+            if(monitorId != null || monitorId != ""){
+                histogramEcharts(monitorId);
+                $('.selectpicker').selectpicker('refresh');
+            }
+        }
+
+    })
 
     function pieECharts(){
 
@@ -108,11 +162,11 @@
         });
     }
 
-    function histogramEcharts() {
+    function histogramEcharts(monitorId) {
         let xData = new Array();
         let seriesData = new Array();
         $.ajax({
-            url : "/chart/histogram",    //后台controller中的请求路径
+            url : "/chart/histogram?monitorId="+monitorId,    //后台controller中的请求路径
             type : 'GET',
             datatype : 'json',
             success : function(res) {
@@ -126,32 +180,37 @@
                         seriesData.push(countList[i])
                     }
                     // 基于准备好的dom，初始化echarts实例
-                    let myChart = echarts.init(document.getElementById('main'));
+                    let myChart = echarts.init(document.getElementById('container-line'));
 
                     // 指定图表的配置项和数据
                     let option = {
                         title: {
-                            text: '时间数量图',
+                            text: '数据走势图',
                             left: 'center'
                         },
                         tooltip:{
                             trigger: 'axis',
-                            formatter: function (params) {
-                                params = params[0];
-                                var date = new Date(params.name);
-                                return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() ;
-                            },
-                            axisPointer: {
-                                animation: false
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        toolbox: {
+                            feature: {
+                                saveAsImage: {}
                             }
                         },
                         xAxis: {
                             type: 'category',
+                            boundaryGap: false,
                             data: xData
                         },
                         yAxis: {type: 'value'},
                         series: [{
                             type: 'line',
+                            smooth: true,
                             data: seriesData
                         }]
                     };
@@ -161,29 +220,6 @@
             }
         });
     }
-
-    // let xData = ['2020-05-21','2020-05-26','2020-06-16','2020-06-26','2020-07-06','2020-07-26','2020-08-06','2020-08-16','2020-08-26'];
-    //
-    // let seriesData = [5, 20, 36, 10, 10, 20, 15, 25, 30];
-    //
-    // // 基于准备好的dom，初始化echarts实例
-    // let myChart = echarts.init(document.getElementById('main'));
-    //
-    // // 指定图表的配置项和数据
-    // let option = {
-    //     xAxis: {
-    //         data: xData
-    //     },
-    //     yAxis: {},
-    //     series: [{
-    //         name: '销量',
-    //         type: 'bar',
-    //         data: seriesData
-    //     }]
-    // };
-    //
-    // // 使用刚指定的配置项和数据显示图表。
-    // myChart.setOption(option);
 
 
 </script>
