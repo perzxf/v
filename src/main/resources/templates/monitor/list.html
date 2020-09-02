@@ -18,15 +18,15 @@
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="home">
                 <div class="panel panel-default">
-                    <!--<div class="panel-body text-center">
-                        <form class="form-inline">
+                    <div class="panel-body text-center">
+                        <!--<form class="form-inline">
                             <div class="form-group">
                                 <label for="nickName">项目名称</label>
                                 <input type="text" class="form-control" id="nickName" placeholder="请输入项目名称">
                             </div>
                             <button type="submit" class="btn btn-primary">搜索</button>
-                        </form>
-                    </div>-->
+                        </form>-->
+                    </div>
                     <div class="row">
                         <div class="col-sm-10 col-sm-offset-1">
                             <table id="itemList"></table>
@@ -69,9 +69,26 @@
         </div>
     </div>
 </div>
+<!--查看原文-->
+<div class="modal fade" id="myLookModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">查看原文</h4>
+            </div>
+            <div class="modal-body">
+                <div class="lookModal"></div>
+            </div>
+        </div>
+    </div>
+</div>
 <script >
 
     $(function () {
+
+        $('#myLookModal').modal('hide');
+
         //初始化表格
         itemListLoad();
 
@@ -130,7 +147,7 @@
             url: "/monitor/item/findAll",    //用来远程获取数据地址  json格式类型 [{"id":"1","name":"张三"},{}]
             datatype: "JSON",   //用来指定服务返回的数据类型  默认是:xml 修改为:json
             autowidth: true,    //自适应父容器
-            caption: "项目列表",    //用来指定表格的标题
+            // caption: "项目列表",    //用来指定表格的标题
             hidegrid: false,    //用来控制在使用标题情况下是否显示折叠按钮
             height:500,     //指定高度
             colNames: ["编号", "项目名称", "关键词",  "备注", "创建时间","创建人","操作"],    //用来指定表格中标题列的名称  colNames 和 colModel 必须成对出现  长度一致
@@ -204,28 +221,28 @@
                         let typeName = "其他";
                         switch (rowObject.siteTypeId) {
                             case 1:
-                                typeName = "微博";
+                                typeName = "新闻网站";
                                 break;
                             case 2:
-                                typeName = "百度贴吧";
+                                typeName = "微博";
                                 break;
                             case 3:
-                                typeName = "天涯论坛";
+                                typeName = "贴吧";
                                 break;
                             case 4:
-                                typeName = "新浪新闻";
+                                typeName = "论坛";
                                 break;
                             case 5:
-                                typeName = "微信公众号";
-                                break;
-                            case 6:
                                 typeName = "今日头条";
                                 break;
-                            case 7:
+                            case 6:
                                 typeName = "知乎";
                                 break;
+                            case 7:
+                                typeName = "微信公众号";
+                                break;
                             case 8:
-                                typeName = "搜狗新闻";
+                                typeName = "其他";
                                 break;
                         }
                         return '<span>'+typeName+'</span>'
@@ -239,15 +256,12 @@
                 {name: "state", align: "center", editable: true,
                     formatter:function(cellvalue, options, rowObject){
                         let stateName = "未加入简报";
-                        switch (rowObject.state){
-                            case 0:
-                                stateName = "未加入简报";
-                                break;
-                            case 1:
-                                stateName = "已加入简报";
-                                break;
+                        if(rowObject.state == 1){
+                            stateName = "已加入简报";
+                            return '<a class="btn btn-success disabled" >'+stateName+'</a>'
+                        }else{
+                            return '<a class="btn btn-success" onclick="joinBulletin(\''+rowObject.monitorId+'\',\''+rowObject.eventId+'\')">'+stateName+'</a>'
                         }
-                        return '<a class="btn btn-danger" onclick="joinBulletin(\''+rowObject.monitorId+'\',\''+rowObject.eventId+'\')">'+stateName+'</a>'
                     }},
                 {name: "eventType", align: "center", editable: true,
                     formatter:function(cellvalue, options, rowObject){
@@ -267,13 +281,16 @@
                     }},
                 {name:"yujing",align:"center", editable: false,search:false,
                     formatter:function(cellvalue, options, rowObject){
-                        //console.log(rowObject.userId);
-                        return '<a class="btn btn-danger" onclick="emailWarn(\''+rowObject.eventId+'\',\''+rowObject.eventTitle+'\',\''+rowObject.eventUrl+'\')">预警</a>'
+                        if(rowObject.state == 1 && rowObject.eventType == -1){ //未加入简报且负面
+                            return '<a class="btn btn-warning" onclick="emailWarn(\''+rowObject.eventId+'\',\''+rowObject.eventTitle+'\',\''+rowObject.eventUrl+'\')">预警</a>'
+                        }else {
+                            return '<a class="btn btn-warning disabled" >预警</a>'
+                        }
                     }},
                 {name:"caozuo",align:"center", editable: false,search:false,
                     formatter:function(cellvalue, options, rowObject){
                         //console.log(rowObject.userId);
-                        return '<a class="btn btn-danger" onclick="lookOriginal(\''+rowObject.eventContent+'\')">查看原文</a>'
+                        return '<a class="btn btn-info" onclick="lookOriginal(\''+rowObject.eventContent+'\')">查看原文</a>'
                     }}
             ],
             pager: "#eventPager",    //用来指定分页工具栏标签的id

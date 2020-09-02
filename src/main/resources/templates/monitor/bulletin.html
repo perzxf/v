@@ -22,6 +22,14 @@
                             </div>
                             <button type="submit" class="btn btn-primary">搜索</button>
                         </form>-->
+                        <div class="panel-body text-center">
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <label for="monitorId">项目选择：</label>
+                                    <select class="selectpicker" id="monitorId" name="monitorId" ></select>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-10 col-sm-offset-1">
@@ -39,14 +47,64 @@
 <script type="text/javascript" src="/assets/pdfjs/build/pdf.js"></script>
 <script>
     $(function () {
-        //初始化表格
-        itemListLoad();
+
+        $('.selectpicker').selectpicker({
+            noneSelectedText : '请选择'    //默认显示内容
+        });
+        //初始化刷新数据
+        $(window).on('load', function() {
+            $('.selectpicker').selectpicker('val', '');
+            $('.selectpicker').selectpicker('refresh');
+        });
+        loadParkdata();    //执行此函数，从后台获取数据，拼接成option标签，添加到select的里面
+
     })
 
-    function itemListLoad() {
+    function loadParkdata(){
+        $.ajax({
+            url : "/monitor/item/listpark",    //后台controller中的请求路径
+            type : 'GET',
+            async : false,
+            datatype : 'json',
+            success : function(res) {
+                if(res.success){
+                    const data = res.data;
+                    const parknames = $("#monitorId");
+                    for(let i=0; i< data.length; i++ ){
+                        let parkdata = data[i];
+                        //拼接成多个<option><option/>
+                        parknames.append('<option value="'+parkdata.monitorId+'">'+parkdata.monitorName+'</option>')
+                    }
+                    $('.selectpicker').selectpicker('val', '');
+                    $('.selectpicker').selectpicker('refresh');
+                }
+            },
+            error : function() {
+                alert('查询名称出错');
+            }
+        });
+    }
+
+    $("#monitorId").on("change",function () {
+
+        for(let i=0; i< 10; i++ ) {
+            const monitorId = $('#monitorId').val();
+            if(monitorId != null || monitorId != ""){
+
+                //初始化表格
+                itemListLoad(monitorId);
+
+                $('.selectpicker').selectpicker('refresh');
+            }
+        }
+
+    })
+
+
+    function itemListLoad(monitorId) {
         $("#itemList").jqGrid({
             styleUI: "Bootstrap",   //用来指定jqgrid的主题样式 固定写死必须是Bootstrap
-            url: "/monitor/bulletin/findAll",    //用来远程获取数据地址  json格式类型 [{"id":"1","name":"张三"},{}]
+            url: "/monitor/bulletin/findAll?monitorId="+monitorId,    //用来远程获取数据地址  json格式类型 [{"id":"1","name":"张三"},{}]
             datatype: "JSON",   //用来指定服务返回的数据类型  默认是:xml 修改为:json
             autowidth: true,    //自适应父容器
             // caption: "项目列表",    //用来指定表格的标题
@@ -69,26 +127,54 @@
             viewrecords: true , //用来显示总记录数
         });
 
-        $("#t_itemList").append("<button class='btn btn-info' id='createReport' >一键生成报告</button>");
+        $("#t_itemList").html("<button class='btn btn-info' id='createReport' >一键生成报告</button>");
 
         $("#createReport", "#t_itemList").click(function() {
-            alert("111111");
-            //先判断是否有勾选
-            $("#itemList").
-            //没有勾选 弹框提示请勾选
-            //有勾选  获取勾选的id(monitorId,eventId)
-            //最后才能走ajax
+            let  bulletinIds = [];
+            $("#itemList tbody tr").find("td:first input:checkbox").each(function (){
+                let isChecked = $(this).prop("checked");
+                if(isChecked){
+                    let tds = $(this).parent("td").parent("tr").find("td");
+                    // alert(tds[1].innerText+tds[2].innerText);
+                    bulletinIds.push(tds[1].innerText);
+                }
+            })
+
+            if(bulletinIds.length == 0){
+                swal("请勾选需要选择的数据框！","","warning");
+            }else{
+                createBulletin(bulletinIds);
+            }
+
         });
     }
 
-    function createBulletin(monitorId,eventId) {
+    //删除事件
+    function delBulletin(bulletinId){
+        $.ajax({
+            url:"/monitor/bulletin/del",
+            type:'POST',
+            data:{
+                bulletinId:bulletinId
+            },
+            dataType:"json",
+            success:function (res) {
+                if(res.success){
+                    swal("删除！", "你选择的信息已经被删除。","success");
+                }else{
+                    swal("删除失败！", "","error");
+                }
+            }
+        })
+    }
+
+    //生成报告
+    function createBulletin(bulletinIds) {
         $.ajax({
             url : "/monitor/bulletin/create",    //后台controller中的请求路径
             type : 'POST',
-            data:{
-                monitorId: monitorId,
-                eventId: eventId
-            },
+            data:JSON.stringify(bulletinIds),//前台要封装成json格式,
+            contentType: 'application/json',//这个必须是这个格式
             datatype : 'json',
             success : function(res) {
                 if(res.success){
@@ -98,11 +184,9 @@
                 }
             },
             error : function() {
-                swal('监测出错','','error');
+                swal('生成出错','','error');
             }
         });
-        // showBulletin();
-
     }
 
     function showBulletin() {

@@ -43,4 +43,7 @@ public class ConstantConfig {
      * 微信公众号发消息模板
      */
     public static final String TEXT_STR = "V楼市监测一条预警信息。【点击查看】：<a href='%s'>%s</a>";
+
+
+    public static final Integer [] INTS = {-1,0,1};
 }

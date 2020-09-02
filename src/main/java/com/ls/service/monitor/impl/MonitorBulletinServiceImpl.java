@@ -8,7 +8,9 @@ import com.ls.entity.monitor.MonitorBulletin;
 import com.ls.entity.system.SysUser;
 import com.ls.mapper.monitor.MonitorBulletinMapper;
 import com.ls.service.monitor.MonitorBulletinService;
+import com.ls.utils.DateUtil;
 import com.ls.utils.RandomUtils;
+import com.ls.utils.StringUtil;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
@@ -50,7 +52,9 @@ public class MonitorBulletinServiceImpl extends ServiceImpl<MonitorBulletinMappe
         //查询条件
         Wrapper<MonitorBulletin> wrapper = new EntityWrapper<>();
         wrapper.ge("bulletin_id",1); //userId 大于等于1
-
+        if(monitorBulletin.getMonitorId() != null){
+            wrapper.eq("monitor_id",monitorBulletin.getMonitorId());
+        }
         List<MonitorBulletin> users = baseMapper.selectPage(pageBulletin, wrapper);
         log.info("当前第{}页,每页展示{}条数据",page,rows);
         return users;
@@ -59,6 +63,9 @@ public class MonitorBulletinServiceImpl extends ServiceImpl<MonitorBulletinMappe
     @Override
     public Integer getCount(MonitorBulletin monitorBulletin) {
         Wrapper<MonitorBulletin> wrapper = new EntityWrapper<>();
+        if(monitorBulletin.getMonitorId() != null){
+            wrapper.eq("monitor_id",monitorBulletin.getMonitorId());
+        }
         Integer count = baseMapper.selectCount(wrapper);
         log.info("查询到用户信息一共{}条",count);
         return count;
@@ -80,7 +87,7 @@ public class MonitorBulletinServiceImpl extends ServiceImpl<MonitorBulletinMappe
     public File createBulletin(Map data) {
 
         Writer out = null;
-        File file = new File(System.getProperty("user.dir")+"/src/main/resources/temp/"+ RandomUtils.string(15) +".doc");
+        File file = new File(System.getProperty("user.dir")+"/src/main/resources/temp/"+ DateUtil.getCurrentDateStr() +".pdf");
         cfg.setClassForTemplateLoading(this.getClass(),"/templates/ftl");
         cfg.setEncoding(Locale.CHINESE,"utf-8");
         cfg.setObjectWrapper(new DefaultObjectWrapper());
@@ -113,6 +120,13 @@ public class MonitorBulletinServiceImpl extends ServiceImpl<MonitorBulletinMappe
 
         return file;
 
+    }
+
+    @Override
+    public MonitorBulletin getbulletinById(long bulletinId) {
+        MonitorBulletin bulletin = new MonitorBulletin();
+        bulletin.setBulletinId(bulletinId);
+        return baseMapper.selectOne(bulletin);
     }
 
 }

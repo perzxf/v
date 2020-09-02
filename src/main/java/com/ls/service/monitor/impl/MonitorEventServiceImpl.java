@@ -6,11 +6,13 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import com.ls.common.ConstantConfig;
 import com.ls.common.RedisCacheKey;
 import com.ls.common.SiteTypeEnum;
 import com.ls.entity.monitor.MonitorEvent;
 import com.ls.mapper.monitor.MonitorEventMapper;
 import com.ls.service.monitor.MonitorEventService;
+import com.ls.utils.RandomUtils;
 import com.ls.utils.RedisUtil;
 import com.ls.utils.StringUtil;
 import org.slf4j.Logger;
@@ -109,7 +111,7 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
             wrapper.le("event_date",date);
 
         }
-        wrapper.orderBy("create_date", false); // 按照创建时间倒序排序
+        wrapper.orderBy("event_date", false); // 按照时间倒序排序
 
         List<MonitorEvent> items = baseMapper.selectPage(userPage, wrapper);
         log.info("当前第{}页,每页展示{}条数据",page,rows);
@@ -158,7 +160,7 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
                 event.setEventUrl(link);
                 event.setCreateDate(new Date());
                 event.setState(0);
-                event.setEventType(0);
+                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
             } else {
@@ -188,7 +190,7 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
                 }
                 event.setCreateDate(new Date());
                 event.setState(0);
-                event.setEventType(0);
+                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
             } else {
@@ -215,7 +217,7 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
                 event.setEventUrl(link);
                 event.setCreateDate(new Date());
                 event.setState(0);
-                event.setEventType(0);
+                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
             } else {
@@ -242,7 +244,7 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
                 event.setEventUrl(link);
                 event.setCreateDate(new Date());
                 event.setState(0);
-                event.setEventType(0);
+                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
             } else {
@@ -269,7 +271,7 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
 //                event.setEventUrl(link);
                 event.setCreateDate(new Date());
                 event.setState(0);
-                event.setEventType(0);
+                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
             } else {
@@ -296,7 +298,7 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
 //                event.setEventUrl(link);
                 event.setCreateDate(new Date());
                 event.setState(0);
-                event.setEventType(0);
+                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
             } else {
@@ -323,7 +325,7 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
 //                event.setEventUrl(link);
                 event.setCreateDate(new Date());
                 event.setState(0);
-                event.setEventType(0);
+                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
 //            } else {

@@ -20,4 +20,6 @@ public interface MonitorBulletinService extends IService<MonitorBulletin> {
     boolean booleanByBulletin(Long eventId);
 
     File createBulletin(Map data);
+
+    MonitorBulletin getbulletinById(long parseLong);
 }
