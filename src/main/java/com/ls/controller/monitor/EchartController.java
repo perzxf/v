@@ -1,7 +1,10 @@
 package com.ls.controller.monitor;
 
+import com.ls.common.SiteTypeEnum;
 import com.ls.entity.monitor.MonitorEvent;
+import com.ls.entity.system.SysSite;
 import com.ls.service.monitor.MonitorEventService;
+import com.ls.service.system.SysSiteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,9 @@ public class EchartController {
     @Autowired
     private MonitorEventService eventService;
 
+    @Autowired
+    private SysSiteService siteService;
+
     /**
      * 获取柱状图的日期数据和每一个日期对应的数量
      */
@@ -55,6 +61,7 @@ public class EchartController {
                  }
              }
 
+
              map.put("success",true);
              map.put("dateList",dateList);   //时间
              map.put("countList",countList); //时间的事件个数
@@ -74,15 +81,18 @@ public class EchartController {
     @ResponseBody
     public Map<String,Object> pieEcharts(){
         Map<String,Object> map = new HashMap<>();
-        Long monitorId = 2l;
+        Long monitorId = null;
         List<MonitorEvent> events = eventService.getEventList(monitorId);
         if(events!=null && !events.isEmpty()){
-            List<Integer>  countList  = new ArrayList<>();
-            for(int i = 1 ;i <= 8 ; i++){
-                Long siteTypeId = Long.valueOf(i);
-                Integer count = eventService.getPieEventCount(monitorId,siteTypeId);
-                log.info("i={},数量={}",i,count);
-                countList.add(count);
+            List<Map<String, Object>>  countList  = new ArrayList<>();
+            List<SysSite> siteList = siteService.getSiteListUniq();
+            for(SysSite site:siteList){
+                Map<String,Object> countMap = new HashMap<>();
+                Integer count = eventService.getPieEventCount(monitorId,site.getSiteTypeId());
+                String siteExpire = SiteTypeEnum.getSiteExpire(site.getSiteTypeId());
+                log.info("网站类型={},数量={}",site.getSiteName(),count);
+                countMap.put(siteExpire,count);
+                countList.add(countMap);
             }
 
             map.put("success",true);
@@ -94,4 +104,6 @@ public class EchartController {
         }
         return map;
     }
+
+
 }
