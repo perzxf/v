@@ -47,10 +47,7 @@ public class MonitorReport {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateDate;
 
-    /**
-     * 报告内容
-     */
-    private String reportContent;
+
 
     /**
      * 项目名称
@@ -72,10 +69,6 @@ public class MonitorReport {
     public void setReportName(String reportName) {
         this.reportName = reportName;
     }
-
-    public String getReportContent() {return reportContent; }
-
-    public void setReportContent(String reportContent) {this.reportContent = reportContent; }
 
     public String getMonitorId() {
         return monitorId;
