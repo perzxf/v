@@ -59,7 +59,7 @@
 <!-- loading -->
 <div class="modal fade" id="loading" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop='static'>
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div class="modal-content" style="margin-top: 50%">
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabel">提示</h4>
             </div>
@@ -72,7 +72,7 @@
 <!--查看原文-->
 <div class="modal fade" id="myLookModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div class="modal-content" style="margin-top: 50%">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">查看原文</h4>
@@ -281,7 +281,7 @@
                     }},
                 {name:"yujing",align:"center", editable: false,search:false,
                     formatter:function(cellvalue, options, rowObject){
-                        if(rowObject.state == 1 && rowObject.eventType == -1){ //未加入简报且负面
+                        if(rowObject.state == 0 && rowObject.eventType == -1){ //未加入简报且负面
                             return '<a class="btn btn-warning" onclick="emailWarn(\''+rowObject.eventId+'\',\''+rowObject.eventTitle+'\',\''+rowObject.eventUrl+'\')">预警</a>'
                         }else {
                             return '<a class="btn btn-warning disabled" >预警</a>'
