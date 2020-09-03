@@ -44,6 +44,7 @@
         }
         .nav-childlink {
             font-size: 16px;
+
             padding: 15px 0 0 25px;
         }
         .link-panel{
@@ -100,7 +101,7 @@
 <!--                    &lt;!&ndash; .panel-collapse和.collapse标明折叠元素 .in表示要显示出来 &ndash;&gt;-->
 <!--                    <div id="collapseListGroup1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">-->
 <!--                        <div class="panel-body">-->
-<!--                            <ul class="list-group" th:id="${menu.menuId}}">-->
+<!--                            <ul class="list-group" th:id="${menu.menuId}">-->
 <!--                                <li class="list-group-item" th:each="cmenu : ${menu.children}">-->
 <!--                                    &lt;!&ndash; 利用data-target指定URL &ndash;&gt;-->
 <!--                                    <a th:id="${cmenu.url}" onclick="load(this.id)" >-->
@@ -135,9 +136,6 @@
                     </li>
                 </ul>
             </div>
-
-
-
 
 
         </div>
@@ -263,9 +261,6 @@
         //初始化饼状图
         sysPie();
     });
-
-
-
 
     //取消修改密码  清空文本框信息
     $("#cancelChangePwd").click(function (){

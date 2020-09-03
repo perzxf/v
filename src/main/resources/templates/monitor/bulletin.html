@@ -189,35 +189,4 @@
         });
     }
 
-    function showBulletin() {
-        // let filePath= "PDFDemo.pdf";
-        // window.location.href = "/assets/pdfjs/web/viewer.html?file=file.pdf";
-        // window.open("assets/pdfjs/web/viewer.html?file=../PDFDemo.pdf");
-        // $.ajax({
-        //     url : "/monitor/bulletin/show",    //后台controller中的请求路径
-        //     type : 'GET',
-        //     data:{
-        //         bulletinId: bulletinId,
-        //         monitorId: monitorId,
-        //         eventId: eventId
-        //     },
-        //     datatype : 'json',
-        //     success : function(res) {
-        //         if(res.success){
-        //             swal(res.msg,'','success');
-        //         }else{
-        //             swal(res.msg,'','error');
-        //         }
-        //     },
-        //     error : function() {
-        //         swal('监测出错','','error');
-        //     }
-        // });
-        let curWwwPath=window.document.location.href;
-        let pathName=window.document.location.pathname;
-        let pos=curWwwPath.indexOf(pathName);
-        let localhostPath=curWwwPath.substring(0,pos);
-        window.open(localhostPath+"/assets/pdfjs/web/viewer.html?file="+"GJDPKhCbJ2ebrPb.pdf");
-
-    }
 </script>
