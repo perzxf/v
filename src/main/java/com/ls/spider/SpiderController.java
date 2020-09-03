@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.ls.common.ConstantConfig;
 import com.ls.common.RedisCacheKey;
-import com.ls.controller.monitor.MonitorController;
-import com.ls.entity.monitor.MonitorEvent;
 import com.ls.entity.monitor.MonitorItem;
 import com.ls.entity.system.SysSite;
 import com.ls.entity.system.SysUser;
@@ -115,6 +113,10 @@ public class SpiderController {
             //判断用户的可实用性
             if (user.getIsOff() == ConstantConfig.ISOFF){  //没有被封禁
                 if(user.getEndDate().getTime() >= new Date().getTime()){  //使用的最后时间要大于当前时间
+
+                    String redisKey = RedisCacheKey.MONITOR.getType();
+                    redisUtil.set(redisKey,item.getMonitorId(),30*60);
+
                     //遍历网站列表
                     List<SysSite> siteList = siteService.getSiteList();
                     if(siteList!=null && !siteList.isEmpty()){
