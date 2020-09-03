@@ -81,9 +81,6 @@
                         </div>
                     </div>
                 </form>
-
-
-
             </div>
         </div>
     </div>
@@ -204,9 +201,7 @@
             type: "GET",
             dataType: "json",
             url: "/system/website/del?siteId="+siteId,
-
             success: function (res) {
-
 
                 $("#siteList").jqGrid('clearGridData');//清空表格内的数据
                 $("#siteList").jqGrid("setGridParam",{  //重新加载表格内数据

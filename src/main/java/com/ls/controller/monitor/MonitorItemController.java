@@ -70,6 +70,7 @@ public class MonitorItemController {
 
         //当前页数据
         List<MonitorItem> lists = itemService.selectUserList(item,page, rows);
+        //给表外字段赋值
         for(MonitorItem monitorItem:lists){
             SysUser byUserId = userService.getByUserId(monitorItem.getUserId());
             monitorItem.setUserName(byUserId.getNickName());
@@ -105,8 +106,8 @@ public class MonitorItemController {
                 wrapper.eq("user_id",userId);
             }
         }
-        List<MonitorItem> items = itemService.selectList(wrapper);
-        map.put("data", items);
+        List<MonitorItem> itemLists = itemService.selectList(wrapper);
+        map.put("data", itemLists);
         map.put("success", true);
         return map;
     }

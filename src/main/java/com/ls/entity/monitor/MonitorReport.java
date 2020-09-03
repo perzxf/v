@@ -70,6 +70,8 @@ public class MonitorReport {
         this.reportName = reportName;
     }
 
+
+
     public String getMonitorId() {
         return monitorId;
     }

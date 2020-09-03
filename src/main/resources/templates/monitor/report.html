@@ -11,6 +11,148 @@
     </div>
     <!--标签页组件-->
     <div>
+        <div>
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">报告列表</a></li>
+            </ul>
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="home">
+                    <div class="panel panel-default">
+                        <div class="row">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <table id="reportList"></table>
+                                <div id="pager"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+            </div>
+        </div>
     </div>
+
 </div>
+<script>
+
+    $(function () {
+        let list = [];
+        loadItemdata(list);    //执行此函数，从后台获取数据，
+
+        reportListLoad(list);   //初始化表格
+    });
+
+    function loadItemdata(list){
+        $.ajax({
+            url : "/monitor/item/listpark",    //后台controller中的请求路径
+            type : 'GET',
+            async : false,
+            datatype : 'json',
+            success : function(res) {
+                if(res.success){
+                    let itemList = res.data;
+                    for(let i=0; i<itemList.length; i++){
+                        let monitorItem = itemList[i];
+                        list.push(monitorItem.monitorId);
+                    }
+                }
+            },
+            error : function() {
+                alert('获取失败');
+            }
+        });
+    }
+
+
+    function reportListLoad(monitorIds) {
+        $("#reportList").jqGrid({
+            styleUI: "Bootstrap",   //用来指定jqgrid的主题样式 固定写死必须是Bootstrap
+            url: "/monitor/report/find?monitorIds="+monitorIds,    //用来远程获取数据地址  json格式类型 [{"id":"1","name":"张三"},{}]
+            datatype: "JSON",   //用来指定服务返回的数据类型  默认是:xml 修改为:json
+            autowidth: true,    //自适应父容器
+            // caption: "项目列表",    //用来指定表格的标题
+            hidegrid: false,    //用来控制在使用标题情况下是否显示折叠按钮
+            height:500,     //指定高度
+            colNames: ["编号", "项目名","报告文件名", "","创建时间","修改时间","","操作"],    //用来指定表格中标题列的名称  colNames 和 colModel 必须成对出现  长度一致
+            colModel: [
+                {name: "reportId", align: "center", editable: true, hidden: true,search:false},
+                {name: "monitorName", align: "center", editable: true},
+                {name: "reportName", align: "center", editable: true},
+                {name: "monitorId", align: "center", editable: true, hidden: true,search:false},
+                {name: "createDate", align: "center", editable: true},
+                {name: "updateDate", align: "center", editable: true},
+                {name: "reportContent", align: "center", hidden: true, editable: true},
+
+                {name:"caozuo",align:"center", editable: false,search:false,
+                    formatter:function(cellvalue, options, rowObject){
+                        //console.log(rowObject.userId);
+                        return '<a class="btn btn-danger" onclick="showBulletin(\''+rowObject.reportName+'\')">查看</a>'+
+                               '<a class="btn btn-danger" onclick="delReport(\''+rowObject.reportId+'\')">删除</a>'
+                    }}
+            ],
+            pager: "#pager",    //用来指定分页工具栏标签的id
+            rowNum: 10,  //用来指定每页显示记录数
+            rowList: [5, 10, 15, 20],  //用来指定下拉列表中每页显示条数
+            viewrecords: true , //用来显示总记录数
+        });
+    }
+
+    function delReport(reportId) {
+
+        $.ajax({
+            url : "/monitor/report/del",    //后台controller中的请求路径
+            type : 'POST',
+            data:{
+                reportId:reportId
+            },
+            datatype : 'json',
+            success : function(res) {
+                if(res.success){
+                    swal(res.msg,'','success');
+                    // eventListLoad(monitorId);
+                }else{
+                    swal(res.msg,'','warning');
+                }
+            },
+            error : function() {
+                swal('删除失败','','error');
+            }
+        });
+
+    }
+
+    function showBulletin(reportName) {
+        // let filePath= "PDFDemo.pdf";
+        // window.location.href = "/assets/pdfjs/web/viewer.html?file=file.pdf";
+        // window.open("assets/pdfjs/web/viewer.html?file=../PDFDemo.pdf");
+        // $.ajax({
+        //     url : "/monitor/bulletin/show",    //后台controller中的请求路径
+        //     type : 'GET',
+        //     data:{
+        //         bulletinId: bulletinId,
+        //         monitorId: monitorId,
+        //         eventId: eventId
+        //     },
+        //     datatype : 'json',
+        //     success : function(res) {
+        //         if(res.success){
+        //             swal(res.msg,'','success');
+        //         }else{
+        //             swal(res.msg,'','error');
+        //         }
+        //     },
+        //     error : function() {
+        //         swal('监测出错','','error');
+        //     }
+        // });
+        let curWwwPath=window.document.location.href;
+        let pathName=window.document.location.pathname;
+        let pos=curWwwPath.indexOf(pathName);
+        let localhostPath=curWwwPath.substring(0,pos);
+
+        window.open(localhostPath+"/assets/pdfjs/web/viewer.html?file="+reportName);
+
+    }
+
+
+
+</script>
