@@ -19,10 +19,18 @@ public class MonitorReport {
      */
     private String  reportName;
 
+
+
+    /**
+     * 报告内容
+     */
+    private String  reportContent;
+
     /**
      * 项目ID
      */
     private String  monitorId;
+
 
 
     /**
@@ -64,6 +72,10 @@ public class MonitorReport {
     public void setReportName(String reportName) {
         this.reportName = reportName;
     }
+
+    public String getReportContent() {return reportContent; }
+
+    public void setReportContent(String reportContent) {this.reportContent = reportContent; }
 
     public String getMonitorId() {
         return monitorId;
@@ -110,6 +122,7 @@ public class MonitorReport {
         return "MonitorReport{" +
                 "reportId=" + reportId +
                 ", reportName='" + reportName + '\'' +
+                ", reportContent='" + reportContent + '\'' +
                 ", monitorId='" + monitorId + '\'' +
                 ", createDate=" + createDate +
                 ", updateDate=" + updateDate +
