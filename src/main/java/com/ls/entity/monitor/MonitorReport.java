@@ -48,6 +48,11 @@ public class MonitorReport {
     private Date updateDate;
 
     /**
+     * 报告内容
+     */
+    private String reportContent;
+
+    /**
      * 项目名称
      */
     private transient  String monitorName;
@@ -96,6 +101,14 @@ public class MonitorReport {
         this.updateDate = updateDate;
     }
 
+    public String getReportContent() {
+        return reportContent;
+    }
+
+    public void setReportContent(String reportContent) {
+        this.reportContent = reportContent;
+    }
+
     public String getMonitorName() {
         return monitorName;
     }
@@ -113,6 +126,7 @@ public class MonitorReport {
                 ", monitorId='" + monitorId + '\'' +
                 ", createDate=" + createDate +
                 ", updateDate=" + updateDate +
+                ", reportContent='" + reportContent + '\'' +
                 ", monitorName='" + monitorName + '\'' +
                 '}';
     }

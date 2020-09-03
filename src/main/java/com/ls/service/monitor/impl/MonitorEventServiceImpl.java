@@ -6,11 +6,13 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import com.ls.common.ConstantConfig;
 import com.ls.common.RedisCacheKey;
 import com.ls.common.SiteTypeEnum;
 import com.ls.entity.monitor.MonitorEvent;
 import com.ls.mapper.monitor.MonitorEventMapper;
 import com.ls.service.monitor.MonitorEventService;
+import com.ls.utils.RandomUtils;
 import com.ls.utils.RedisUtil;
 import com.ls.utils.StringUtil;
 import org.slf4j.Logger;
@@ -18,7 +20,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @Service
@@ -49,7 +53,19 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
         Wrapper<MonitorEvent> wrapper = new EntityWrapper<>();
         if(monitorId != null){
             wrapper.eq("monitor_id", monitorId);
+
+            //时间搜索  当天时间往前推15天
+            Date date = new Date();
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(date);
+            calendar.add(calendar.DAY_OF_WEEK, -15);
+            wrapper.ge("event_date",calendar.getTime());
+            wrapper.le("event_date",date);
+
         }
+
+        wrapper.orderBy("event_date", true); // 按照创建时间排序
+
         return baseMapper.selectList(wrapper);
     }
 
@@ -86,8 +102,16 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
         wrapper.ge("event_id",1); //userId 大于等于1
         if(item != null){
             wrapper.eq("monitor_id", item.getMonitorId()); // 精确查询
+            //时间搜索  当天时间往前推15天
+            Date date = new Date();
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(date);
+            calendar.add(calendar.DAY_OF_WEEK, -15);
+            wrapper.ge("event_date",calendar.getTime());
+            wrapper.le("event_date",date);
+
         }
-        wrapper.orderBy("create_date", false); // 按照创建时间倒序排序
+        wrapper.orderBy("event_date", false); // 按照时间倒序排序
 
         List<MonitorEvent> items = baseMapper.selectPage(userPage, wrapper);
         log.info("当前第{}页,每页展示{}条数据",page,rows);
@@ -99,6 +123,13 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
         Wrapper<MonitorEvent> wrapper = new EntityWrapper<>();
         if(item != null){
             wrapper.eq("monitor_id", item.getMonitorId()); // 精确查询
+            //时间搜索  当天时间往前推15天
+            Date date = new Date();
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(date);
+            calendar.add(calendar.DAY_OF_WEEK, -15);
+            wrapper.ge("event_date",calendar.getTime());
+            wrapper.le("event_date",date);
         }
         Integer count = baseMapper.selectCount(wrapper);
         log.info("查询到用户信息一共{}条",count);
@@ -129,7 +160,7 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
                 event.setEventUrl(link);
                 event.setCreateDate(new Date());
                 event.setState(0);
-                event.setEventType(0);
+                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
             } else {
@@ -159,7 +190,7 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
                 }
                 event.setCreateDate(new Date());
                 event.setState(0);
-                event.setEventType(0);
+                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
             } else {
@@ -186,7 +217,7 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
                 event.setEventUrl(link);
                 event.setCreateDate(new Date());
                 event.setState(0);
-                event.setEventType(0);
+                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
             } else {
@@ -213,7 +244,7 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
                 event.setEventUrl(link);
                 event.setCreateDate(new Date());
                 event.setState(0);
-                event.setEventType(0);
+                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
             } else {
@@ -240,7 +271,7 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
 //                event.setEventUrl(link);
                 event.setCreateDate(new Date());
                 event.setState(0);
-                event.setEventType(0);
+                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
             } else {
@@ -267,7 +298,7 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
 //                event.setEventUrl(link);
                 event.setCreateDate(new Date());
                 event.setState(0);
-                event.setEventType(0);
+                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
             } else {
@@ -294,7 +325,7 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
 //                event.setEventUrl(link);
                 event.setCreateDate(new Date());
                 event.setState(0);
-                event.setEventType(0);
+                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
 //            } else {

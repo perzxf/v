@@ -116,4 +116,14 @@ public class RandomUtils {
         return sb.toString();
     }
 
+
+    public static void main(String[] args) {
+        Integer[] ints = {-1,0,1};
+        Random random = new Random();
+        int index = random.nextInt(ints.length);
+        System.out.println(randomItem(ints));
+
+//        Integer integer = randomItem(ints);
+    }
+
 }

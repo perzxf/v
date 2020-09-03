@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,11 +24,12 @@ public class MonitorEventController {
 
     @GetMapping("/event/findAll")
     @ResponseBody
-    public Map<String, Object> findAll(Long monitorId,Integer page, Integer rows){
+    public Map<String, Object> findAll(Long monitorId,Integer page, Integer rows) throws ParseException {
         Map<String, Object> map = new HashMap<>();
 
         MonitorEvent monitorEvent = new MonitorEvent();
         monitorEvent.setMonitorId(monitorId);
+
         //当前页数据
         List<MonitorEvent> lists = eventService.selectEventList(monitorEvent,page, rows);
         //总条数
