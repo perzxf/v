@@ -89,7 +89,7 @@ public class MonitorBulletinController {
         int goodCount = 0;
         int badCount = 0;
         int otherCount = 0;
-
+        Long monitorId = null;
         List<String[]> cellgrids = new ArrayList<>();
 
         for(String bulletinId:bulletinIds){
@@ -98,6 +98,7 @@ public class MonitorBulletinController {
             MonitorBulletin bulletin = bulletinService.getbulletinById(Long.parseLong(bulletinId));
             //查询数据
             MonitorEvent monitorEvent = eventService.getEventById(bulletin.getEventId());
+            monitorId = monitorEvent.getMonitorId();
             Integer eventType = monitorEvent.getEventType();
             if(eventType == ConstantConfig.EVENT_TYPE_NEGATIVE){
                 badCount ++;
@@ -106,14 +107,14 @@ public class MonitorBulletinController {
             }else if(eventType == ConstantConfig.EVENT_TYPE_POSITIVE){
                 goodCount ++;
             }
-            cells[1] = monitorEvent.getEventTitle();
-            cells[2] = monitorEvent.getEventUrl();
-            cells[3] = DateUtil.formatDate(monitorEvent.getEventDate(),"yyyy-MM-dd");
+            cells[0] = monitorEvent.getEventTitle();
+            cells[1] = monitorEvent.getEventUrl();
+            cells[2] = DateUtil.formatDate(monitorEvent.getEventDate(),"yyyy-MM-dd");
             cellgrids.add(cells);
             //查询项目
-            MonitorItem monitorItem = itemService.getMonitorItemById(monitorEvent.getMonitorId());
+            MonitorItem monitorItem = itemService.getMonitorItemById(monitorId);
             if(!monitorName.contains(monitorItem.getMonitorName())){
-                monitorName.concat(monitorItem.getMonitorName());
+                monitorName = monitorName.concat(monitorItem.getMonitorName());
             }
         }
         data.put("monitorName",monitorName);
@@ -123,7 +124,7 @@ public class MonitorBulletinController {
         data.put("otherCount",otherCount);
         data.put("cellgrids",cellgrids);
         data.put("time", DateUtil.formatDate(new Date(),"yyyy-MM-dd"));
-        File bulletin = bulletinService.createBulletin(data);
+        bulletinService.createBulletin(data,monitorId);
 
         map.put("success",true);
         map.put("msg","生成了");

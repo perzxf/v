@@ -5,22 +5,25 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.ls.entity.monitor.MonitorBulletin;
+import com.ls.entity.monitor.MonitorReport;
 import com.ls.entity.system.SysUser;
 import com.ls.mapper.monitor.MonitorBulletinMapper;
 import com.ls.service.monitor.MonitorBulletinService;
+
 import com.ls.utils.DateUtil;
-import com.ls.utils.RandomUtils;
-import com.ls.utils.StringUtil;
+import com.ls.service.monitor.MonitorReportService;
+import com.ls.utils.PdfUtil;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -31,7 +34,8 @@ public class MonitorBulletinServiceImpl extends ServiceImpl<MonitorBulletinMappe
     private static final Logger log = LoggerFactory.getLogger(MonitorBulletinServiceImpl.class);
     private static Configuration cfg = new Configuration(Configuration.getVersion());
 
-
+    @Autowired
+    private MonitorReportService monitorReportService;
 
 
     @Override
@@ -84,23 +88,32 @@ public class MonitorBulletinServiceImpl extends ServiceImpl<MonitorBulletinMappe
     }
 
     @Override
-    public File createBulletin(Map data) {
+    public File createBulletin(Map data,Long monitorId) {
+        MonitorReport monitorReport = new MonitorReport();
+        Writer out = new StringWriter();
+        File file = new File(System.getProperty("user.dir")+"/src/main/resources/static/assets/pdfjs/web/"+ DateUtil.getCurrentDateStr() +".pdf");
 
-        Writer out = null;
-        File file = new File(System.getProperty("user.dir")+"/src/main/resources/temp/"+ DateUtil.getCurrentDateStr() +".pdf");
         cfg.setClassForTemplateLoading(this.getClass(),"/templates/ftl");
         cfg.setEncoding(Locale.CHINESE,"utf-8");
         cfg.setObjectWrapper(new DefaultObjectWrapper());
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.IGNORE_HANDLER);
         try {
-            Template template = cfg.getTemplate("vlousmuban1.ftl");
+            Template template = cfg.getTemplate("vlousmuban3.ftl");
 
-            out = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
+//            out = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
             /**
              * @data 是输入
              * @out 是输出
              */
             template.process(data,out);
+            monitorReport.setCreateDate(new Date());
+            monitorReport.setMonitorId(monitorId.toString());
+            monitorReport.setUpdateDate(new Date());
+            monitorReport.setReportContent(out.toString());
+            monitorReport.setReportName(file.getName());
+            PdfUtil.createPdf(monitorReport.getReportContent(),file);
+
+            monitorReportService.insert(monitorReport);
 
             out.flush();
 
