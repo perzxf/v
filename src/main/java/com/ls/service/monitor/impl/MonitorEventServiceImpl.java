@@ -6,13 +6,11 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
-import com.ls.common.ConstantConfig;
 import com.ls.common.RedisCacheKey;
 import com.ls.common.SiteTypeEnum;
 import com.ls.entity.monitor.MonitorEvent;
 import com.ls.mapper.monitor.MonitorEventMapper;
 import com.ls.service.monitor.MonitorEventService;
-import com.ls.utils.RandomUtils;
 import com.ls.utils.RedisUtil;
 import com.ls.utils.StringUtil;
 import org.slf4j.Logger;
@@ -152,7 +150,9 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
         for (MonitorEvent event:events){
             event.setMonitorId(redisMonitorId);
             event.setSiteTypeId(SiteTypeEnum.WEI_XIN.getExpire()); //网站数据类型
-            String link = "https://weixin.sogou.com"+event.getEventUrl();
+//            String link = "https://weixin.sogou.com"+event.getEventUrl();
+            String link = "https://weixin.sogou.com/weixin?type=2&ie=utf8&query="+event.getEventTitle();  //存链接的方式
+
             //判断记录是否已存在
             List<MonitorEvent> list = selectInfo(event);
             if (CollUtil.isEmpty(list)) {
@@ -160,7 +160,9 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
                 event.setEventUrl(link);
                 event.setCreateDate(new Date());
                 event.setState(0);
-                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
+//                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
+                event.setEventType(0);   //事件类型    暂定默认中性
+                event.setIsUse(1);  //默认数据信息有用
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
             } else {
@@ -190,7 +192,9 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
                 }
                 event.setCreateDate(new Date());
                 event.setState(0);
-                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
+//                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
+                event.setEventType(0);  //事件类型    暂定默认中性
+                event.setIsUse(1);  //默认数据信息有用
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
             } else {
@@ -209,15 +213,20 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
         for (MonitorEvent event:events){
             event.setMonitorId(redisMonitorId);
             event.setSiteTypeId(SiteTypeEnum.ZHI_HU.getExpire()); //网站数据类型
-            String link = "https://www.sogou.com"+event.getEventUrl();
+//            String link = "https://www.sogou.com"+event.getEventUrl();
             //判断记录是否已存在
             List<MonitorEvent> list = selectInfo(event);
             if (CollUtil.isEmpty(list)) {
                 //把url放到任务队列中
-                event.setEventUrl(link);
+                if(!StringUtil.getResult(event.getEventUrl(), "http")){
+                    String link = "https://www.sogou.com"+event.getEventUrl();
+                    event.setEventUrl(link);
+                }
                 event.setCreateDate(new Date());
                 event.setState(0);
-                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
+//                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
+                event.setEventType(0);   //事件类型    暂定默认中性
+                event.setIsUse(1);  //默认数据信息有用
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
             } else {
@@ -244,7 +253,9 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
                 event.setEventUrl(link);
                 event.setCreateDate(new Date());
                 event.setState(0);
-                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
+//                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
+                event.setEventType(0);  //事件类型    暂定默认中性
+                event.setIsUse(1);  //默认数据信息有用
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
             } else {
@@ -271,7 +282,9 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
 //                event.setEventUrl(link);
                 event.setCreateDate(new Date());
                 event.setState(0);
-                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
+//                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
+                event.setEventType(0);  //事件类型    暂定默认中性
+                event.setIsUse(1);  //默认数据信息有用
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
             } else {
@@ -298,7 +311,9 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
 //                event.setEventUrl(link);
                 event.setCreateDate(new Date());
                 event.setState(0);
-                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
+//                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
+                event.setEventType(0);   //事件类型    暂定默认中性
+                event.setIsUse(1);  //默认数据信息有用
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
             } else {
@@ -325,7 +340,9 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
 //                event.setEventUrl(link);
                 event.setCreateDate(new Date());
                 event.setState(0);
-                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
+//                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
+                event.setEventType(0);   //事件类型    暂定默认中性
+                event.setIsUse(1);  //默认数据信息有用
                 baseMapper.insert(event);
                 log.info("保存的信息：{}",event.toString());
 //            } else {

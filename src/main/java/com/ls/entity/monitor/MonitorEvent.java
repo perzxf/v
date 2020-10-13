@@ -63,6 +63,11 @@ public class MonitorEvent {
      */
     private Long monitorId;
 
+    /**
+     * 数据是否有用
+     */
+    private Integer isUse;
+
 
     public Long getEventId() {
         return eventId;
@@ -144,7 +149,13 @@ public class MonitorEvent {
         this.siteTypeId = siteTypeId;
     }
 
+    public Integer getIsUse() {
+        return isUse;
+    }
 
+    public void setIsUse(Integer isUse) {
+        this.isUse = isUse;
+    }
 
     @Override
     public String toString() {
@@ -159,6 +170,7 @@ public class MonitorEvent {
                 ", state=" + state +
                 ", eventType=" + eventType +
                 ", monitorId=" + monitorId +
+                ", isUse=" + isUse +
                 '}';
     }
 }
