@@ -1,6 +1,8 @@
 package com.ls.controller.monitor;
 
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.ls.common.ConstantConfig;
 import com.ls.entity.monitor.MonitorBulletin;
 import com.ls.entity.monitor.MonitorEvent;
@@ -17,7 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,4 +73,21 @@ public class MonitorReportController {
         return map;
     }
 
+    /**
+     * 通过输出流的形式  把数据库中的 内容  输出到页面上
+     * @param reportId
+     * @param response
+     */
+    @GetMapping("/monitor/report/look")
+    public void look( String reportId ,HttpServletResponse response){
+        Wrapper<MonitorReport> wrapper = new EntityWrapper<>();
+        wrapper.eq("report_id",reportId);
+        MonitorReport report = reportService.selectOne(wrapper);
+        response.setContentType("text/html;charset=utf-8");
+        try {
+            response.getWriter().write(report.getReportContent());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
