@@ -13,6 +13,7 @@ import com.ls.service.system.SysSiteService;
 import com.ls.service.system.SysUserService;
 import com.ls.utils.RedisUtil;
 import com.ls.utils.StringUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,10 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/spider")
+@Slf4j
 public class SpiderController {
 
-    private static final Logger log = LoggerFactory.getLogger(SpiderController.class);
+//    private static final Logger log = LoggerFactory.getLogger(SpiderController.class);
 
     /**
      * 页面有一个开启按钮，进来之后携带（项目ID）

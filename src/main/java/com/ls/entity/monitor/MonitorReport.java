@@ -2,10 +2,12 @@ package com.ls.entity.monitor;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
+@Data
 public class MonitorReport {
 
     /**
@@ -48,81 +50,9 @@ public class MonitorReport {
     private Date updateDate;
 
 
-
     /**
      * 项目名称
      */
     private transient  String monitorName;
 
-    public Long getReportId() {
-        return reportId;
-    }
-
-    public void setReportId(Long reportId) {
-        this.reportId = reportId;
-    }
-
-    public String getReportName() {
-        return reportName;
-    }
-
-    public void setReportName(String reportName) {
-        this.reportName = reportName;
-    }
-
-
-
-    public String getMonitorId() {
-        return monitorId;
-    }
-
-    public void setMonitorId(String monitorId) {
-        this.monitorId = monitorId;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    public String getReportContent() {
-        return reportContent;
-    }
-
-    public void setReportContent(String reportContent) {
-        this.reportContent = reportContent;
-    }
-
-    public String getMonitorName() {
-        return monitorName;
-    }
-
-    public void setMonitorName(String monitorName) {
-        this.monitorName = monitorName;
-    }
-
-    @Override
-    public String toString() {
-        return "MonitorReport{" +
-                "reportId=" + reportId +
-                ", reportName='" + reportName + '\'' +
-                ", reportContent='" + reportContent + '\'' +
-                ", monitorId='" + monitorId + '\'' +
-                ", createDate=" + createDate +
-                ", updateDate=" + updateDate +
-                ", reportContent='" + reportContent + '\'' +
-                ", monitorName='" + monitorName + '\'' +
-                '}';
-    }
 }

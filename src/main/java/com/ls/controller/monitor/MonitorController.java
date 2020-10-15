@@ -3,15 +3,19 @@ package com.ls.controller.monitor;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.ls.common.ConstantConfig;
+import com.ls.common.WeChatConfig;
 import com.ls.entity.monitor.MonitorEvent;
 import com.ls.entity.monitor.MonitorItem;
 import com.ls.entity.system.SysUser;
+import com.ls.entity.weChat.WeChatUserInfo;
 import com.ls.service.monitor.MailService;
 import com.ls.service.monitor.MonitorBulletinService;
 import com.ls.service.monitor.MonitorEventService;
 import com.ls.service.monitor.MonitorItemService;
 import com.ls.service.system.SysUserService;
+import com.ls.service.weChat.WeChatUserInfoService;
 import com.ls.utils.WeChatUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +31,10 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@Slf4j
 public class MonitorController {
 
-    private static final Logger log = LoggerFactory.getLogger(MonitorController.class);
+//    private static final Logger log = LoggerFactory.getLogger(MonitorController.class);
 
     @GetMapping("/monitor/add")
     public String toMonitorAdd(){
@@ -139,4 +144,51 @@ public class MonitorController {
             }
         }
     }
+
+    
+    @Autowired
+    private WeChatUserInfoService weChatService;
+
+    /**
+     * 定时更新微信公众号人员列表
+     */
+    @Scheduled(cron = "0 0 0/1 * * ?")   //每1小时更新一次
+    public void updateWeChatInfo(){
+        log.info("开始执行定时更新微信公众号人员任务: "+new Date().toLocaleString());
+        //根据appid和appsecret获取access_token
+        String accessToken = weChatUtil.getAccessToken(WeChatConfig.APPID, WeChatConfig.SECRET);
+        //获取微信公众号关注者 openid 列表
+        List<Object> openids = weChatUtil.getWeChatUsers(accessToken);
+        for (Object openid : openids) {
+            //根据 openid 和 accessToken 获取用户个人信息
+            WeChatUserInfo wChatUser = weChatUtil.getWChatUser(openid, accessToken);
+            //把用户个人信息存入数据库中
+            weChatService.addWeChatUser(wChatUser);
+        }
+    }
+
+
+    /**
+     * test测试微信公众号发信息
+     */
+    /*@Scheduled(cron = "0/10 * * * * ?")
+    public void testWeChatSendText(){
+        log.info("开始测试微信公众号自动发送消息给某个关注人员: "+new Date().toLocaleString());
+
+        //发送微信到公众号里面
+
+        String testUrl = "https://mp.weixin.qq.com/s/4xwA-xN3pOuyjYGOQozsBQ";
+        String testTitle ="测试----州来皖投 天下·明珠 | 巅峰之上 明珠熠熠";
+
+        String format_str = String.format(ConstantConfig.TEXT_STR,testUrl,testTitle);
+
+        //测试发送给某一个人
+//        String openid = "o8_Rss1ym4rQGnUhOVaPWKtKJqWA";
+        String openid = "o8_Rss0MVmmLuvZFp6-TgMeMtMyg";
+
+        weChatUtil.sendText(null,openid,format_str);
+
+    }*/
+
+
 }

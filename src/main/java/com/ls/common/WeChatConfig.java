@@ -36,6 +36,8 @@ public class WeChatConfig {
      */
     public static final String CUSTOM_SEND = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=ACCESS_TOKEN";
 
-
-
+    /**
+     * 获取公众号的自动回复规则
+     */
+    public static final String GET_CURRENT_AUTOREPLY_INFO = "https://api.weixin.qq.com/cgi-bin/get_current_autoreply_info?access_token=ACCESS_TOKEN";
 }

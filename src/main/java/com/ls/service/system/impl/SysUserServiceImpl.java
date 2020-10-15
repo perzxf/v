@@ -10,6 +10,7 @@ import com.ls.mapper.system.SysUserMapper;
 import com.ls.service.system.SysUserService;
 import com.ls.utils.Md5Util;
 import com.ls.utils.StringUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +22,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 @Service
+@Slf4j
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
 
-    private static final Logger log = LoggerFactory.getLogger(SysUserServiceImpl.class);
+//    private static final Logger log = LoggerFactory.getLogger(SysUserServiceImpl.class);
 
     @Override
     public SysUser findByUserName(String userName) {

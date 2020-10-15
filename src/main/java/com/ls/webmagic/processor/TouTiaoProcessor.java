@@ -26,7 +26,7 @@ import java.util.Random;
 @Slf4j
 public class TouTiaoProcessor implements PageProcessor {
 
-    private static final Logger log = LoggerFactory.getLogger(TouTiaoProcessor.class);
+//    private static final Logger log = LoggerFactory.getLogger(TouTiaoProcessor.class);
 
     /**
      * 解析页面

@@ -2,10 +2,12 @@ package com.ls.entity.monitor;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
+@Data
 public class MonitorItem {
     /**
      * 项目ID（主键）
@@ -43,59 +45,4 @@ public class MonitorItem {
 
     private transient String userName;
 
-    public Long getMonitorId() {
-        return monitorId;
-    }
-
-    public void setMonitorId(Long monitorId) {
-        this.monitorId = monitorId;
-    }
-
-    public String getMonitorName() {
-        return monitorName;
-    }
-
-    public void setMonitorName(String monitorName) {
-        this.monitorName = monitorName;
-    }
-
-    public String getKeywords() {
-        return keywords;
-    }
-
-    public void setKeywords(String keywords) {
-        this.keywords = keywords;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 }

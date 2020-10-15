@@ -24,7 +24,7 @@ import java.util.Random;
 @Slf4j
 public class TieBaProcessor implements PageProcessor {
 
-    private static final Logger log = LoggerFactory.getLogger(TieBaProcessor.class);
+//    private static final Logger log = LoggerFactory.getLogger(TieBaProcessor.class);
 
     @Override
     public void process(Page page) {

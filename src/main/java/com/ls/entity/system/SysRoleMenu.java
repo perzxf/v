@@ -1,7 +1,9 @@
 package com.ls.entity.system;
 
 import com.baomidou.mybatisplus.annotations.TableId;
+import lombok.Data;
 
+@Data
 public class SysRoleMenu {
 
     /**
@@ -20,27 +22,4 @@ public class SysRoleMenu {
      */
     private Long    menuId;
 
-    public Long getRmId() {
-        return rmId;
-    }
-
-    public void setRmId(Long rmId) {
-        this.rmId = rmId;
-    }
-
-    public Long getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
-    }
-
-    public Long getMenuId() {
-        return menuId;
-    }
-
-    public void setMenuId(Long menuId) {
-        this.menuId = menuId;
-    }
 }

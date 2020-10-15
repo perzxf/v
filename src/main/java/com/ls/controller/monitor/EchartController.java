@@ -5,6 +5,7 @@ import com.ls.entity.monitor.MonitorEvent;
 import com.ls.entity.system.SysSite;
 import com.ls.service.monitor.MonitorEventService;
 import com.ls.service.system.SysSiteService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,10 @@ import java.util.*;
  * @version: v1.0
  */
 @Controller
+@Slf4j
 public class EchartController {
 
-    private static final Logger log = LoggerFactory.getLogger(EchartController.class);
+//    private static final Logger log = LoggerFactory.getLogger(EchartController.class);
 
     /**
      * 折线图与柱状图：x轴 时间  ； y轴 数量    事件   正负面

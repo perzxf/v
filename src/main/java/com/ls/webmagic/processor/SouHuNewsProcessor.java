@@ -28,7 +28,7 @@ import java.util.Random;
 @Slf4j
 public class SouHuNewsProcessor implements PageProcessor {
 
-    private static final Logger log = LoggerFactory.getLogger(SouHuNewsProcessor.class);
+//    private static final Logger log = LoggerFactory.getLogger(SouHuNewsProcessor.class);
 
     /**
      * 解析页面

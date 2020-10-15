@@ -19,7 +19,13 @@ public class DateUtil {
             return null;
         }
         SimpleDateFormat sdf = new SimpleDateFormat(format);
-        return sdf.parse(str);
+        Date parse;
+        try{
+             parse = sdf.parse(str);
+        }catch (Exception e){
+             parse = null;
+        }
+        return parse;
     }
 
     public static String timeStamp2Date(String seconds,String format) {

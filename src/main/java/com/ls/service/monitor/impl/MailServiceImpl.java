@@ -1,6 +1,7 @@
 package com.ls.service.monitor.impl;
 
 import com.ls.service.monitor.MailService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,9 @@ import javax.mail.internet.MimeMessage;
  * @version: v1.0
  */
 @Service
+@Slf4j
 public class MailServiceImpl implements MailService {
-    private static final Logger log = LoggerFactory.getLogger(MailServiceImpl.class);
+//    private static final Logger log = LoggerFactory.getLogger(MailServiceImpl.class);
 
     @Autowired
     private JavaMailSender mailSender;

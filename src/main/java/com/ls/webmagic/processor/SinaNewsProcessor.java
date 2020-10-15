@@ -28,7 +28,7 @@ import java.util.Random;
 @Slf4j
 public class SinaNewsProcessor implements PageProcessor {
 
-    private static final Logger log = LoggerFactory.getLogger(SinaNewsProcessor.class);
+//    private static final Logger log = LoggerFactory.getLogger(SinaNewsProcessor.class);
 
     /**
      * 解析页面

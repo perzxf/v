@@ -160,4 +160,46 @@ public class WeChatUtil {
         return map;
     }
 
+
+    /**
+     *
+     */
+    /*public  Map sendAutoReplyText(String accessToken,String openid,String add_friend_str,String message_default_str){
+        Map<String, Object> map = new HashMap<>();
+
+        String autoreplyUrl = WeChatConfig.GET_CURRENT_AUTOREPLY_INFO;
+
+        if(StringUtil.isEmpty(accessToken)){
+            accessToken = this.getAccessToken(WeChatConfig.APPID, WeChatConfig.SECRET);
+        }
+        try {
+            //替换url的参数
+            autoreplyUrl = autoreplyUrl.replaceAll("ACCESS_TOKEN",accessToken);
+            //整理JSON
+
+            Map<String,Object> strMap = new HashMap<>();
+            strMap.put("is_add_friend_reply_open",1);
+            strMap.put("is_autoreply_open",1);
+
+            Map<String,Object> add_friend_map = new HashMap<>();
+            add_friend_map.put("type","text");
+            add_friend_map.put("content",add_friend_str);
+            strMap.put("add_friend_autoreply_info", add_friend_map);
+
+            Map<String,Object> message_default_map = new HashMap<>();
+            message_default_map.put("type","text");
+            message_default_map.put("content",message_default_str);
+            strMap.put("message_default_autoreply_info", message_default_map);
+
+            String data = new Gson().toJson(strMap);
+
+            // 发送请求
+//            map = HttpClient.httpClientGet(autoreplyUrl, data);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return map;
+    }*/
+
 }

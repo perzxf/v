@@ -2,10 +2,12 @@ package com.ls.entity.monitor;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
+@Data
 public class MonitorEvent {
     /**
      * 记录数据ID（主键）
@@ -69,108 +71,4 @@ public class MonitorEvent {
     private Integer isUse;
 
 
-    public Long getEventId() {
-        return eventId;
-    }
-
-    public void setEventId(Long eventId) {
-        this.eventId = eventId;
-    }
-
-    public String getEventTitle() {
-        return eventTitle;
-    }
-
-    public void setEventTitle(String eventTitle) {
-        this.eventTitle = eventTitle;
-    }
-
-    public String getEventUrl() {
-        return eventUrl;
-    }
-
-    public void setEventUrl(String eventUrl) {
-        this.eventUrl = eventUrl;
-    }
-
-    public Date getEventDate() {
-        return eventDate;
-    }
-
-    public void setEventDate(Date eventDate) {
-        this.eventDate = eventDate;
-    }
-
-    public String getEventContent() {
-        return eventContent;
-    }
-
-    public void setEventContent(String eventContent) {
-        this.eventContent = eventContent;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Integer getState() {
-        return state;
-    }
-
-    public void setState(Integer state) {
-        this.state = state;
-    }
-
-    public Integer getEventType() {
-        return eventType;
-    }
-
-    public void setEventType(Integer eventType) {
-        this.eventType = eventType;
-    }
-
-    public Long getMonitorId() {
-        return monitorId;
-    }
-
-    public void setMonitorId(Long monitorId) {
-        this.monitorId = monitorId;
-    }
-
-    public Long getSiteTypeId() {
-        return siteTypeId;
-    }
-
-    public void setSiteTypeId(Long siteTypeId) {
-        this.siteTypeId = siteTypeId;
-    }
-
-    public Integer getIsUse() {
-        return isUse;
-    }
-
-    public void setIsUse(Integer isUse) {
-        this.isUse = isUse;
-    }
-
-    @Override
-    public String toString() {
-        return "MonitorEvent{" +
-                "eventId=" + eventId +
-                ", eventTitle='" + eventTitle + '\'' +
-                ", eventUrl='" + eventUrl + '\'' +
-                ", siteTypeId=" + siteTypeId +
-                ", eventDate=" + eventDate +
-                ", eventContent='" + eventContent + '\'' +
-                ", createDate=" + createDate +
-                ", state=" + state +
-                ", eventType=" + eventType +
-                ", monitorId=" + monitorId +
-                ", isUse=" + isUse +
-                '}';
-    }
 }

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.ls.entity.system.SysSite;
 import com.ls.mapper.system.SysSiteMapper;
 import com.ls.service.system.SysSiteService;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,9 +16,10 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Slf4j
 public class SysSiteServiceImpl extends ServiceImpl<SysSiteMapper, SysSite> implements SysSiteService {
 
-    private static final Logger log = LoggerFactory.getLogger(SysSiteServiceImpl.class);
+//    private static final Logger log = LoggerFactory.getLogger(SysSiteServiceImpl.class);
 
     @Override
     public List<SysSite> selectUserList(SysSite sysSite, Integer page, Integer rows) {

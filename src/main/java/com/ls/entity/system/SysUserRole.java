@@ -1,7 +1,9 @@
 package com.ls.entity.system;
 
 import com.baomidou.mybatisplus.annotations.TableId;
+import lombok.Data;
 
+@Data
 public class SysUserRole {
 
     /**
@@ -20,27 +22,5 @@ public class SysUserRole {
      */
     private Long    roleId;
 
-    public Long getUrId() {
-        return urId;
-    }
 
-    public void setUrId(Long urId) {
-        this.urId = urId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
-    }
 }

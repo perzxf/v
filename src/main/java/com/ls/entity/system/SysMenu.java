@@ -1,10 +1,12 @@
 package com.ls.entity.system;
 
 import com.baomidou.mybatisplus.annotations.TableId;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class SysMenu {
     /**
      * 菜单ID（主键）
@@ -37,63 +39,4 @@ public class SysMenu {
      */
     private transient List<SysMenu> children = new ArrayList<>();
 
-    public Long getMenuId() {
-        return menuId;
-    }
-
-    public void setMenuId(Long menuId) {
-        this.menuId = menuId;
-    }
-
-    public String getMenuName() {
-        return menuName;
-    }
-
-    public void setMenuName(String menuName) {
-        this.menuName = menuName;
-    }
-
-    public Long getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public List<SysMenu> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<SysMenu> children) {
-        this.children = children;
-    }
-
-    @Override
-    public String toString() {
-        return "SysMenu{" +
-                "menuId=" + menuId +
-                ", menuName='" + menuName + '\'' +
-                ", parentId=" + parentId +
-                ", url='" + url + '\'' +
-                ", remark='" + remark + '\'' +
-                ", children=" + children +
-                '}';
-    }
 }

@@ -112,6 +112,7 @@ public class SysUserController {
                 map.put("msg","用户名或密码为空！");
             }else{
                 userService.saveUser(user);
+
                 map.put("success", true);
                 map.put("msg", "用户新增成功！");
             }

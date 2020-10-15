@@ -28,7 +28,7 @@ import java.util.Random;
 @Slf4j
 public class WeChatProcessor implements PageProcessor {
 
-    private static final Logger log = LoggerFactory.getLogger(WeChatProcessor.class);
+//    private static final Logger log = LoggerFactory.getLogger(WeChatProcessor.class);
 
 
     /**

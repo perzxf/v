@@ -1,7 +1,9 @@
 package com.ls.entity.system;
 
 import com.baomidou.mybatisplus.annotations.TableId;
+import lombok.Data;
 
+@Data
 public class SysRole {
 
     /**
@@ -20,27 +22,5 @@ public class SysRole {
      */
     private String  remark;
 
-    public Long getRoleId() {
-        return roleId;
-    }
 
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
 }

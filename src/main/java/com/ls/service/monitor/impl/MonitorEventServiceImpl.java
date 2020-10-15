@@ -13,6 +13,7 @@ import com.ls.mapper.monitor.MonitorEventMapper;
 import com.ls.service.monitor.MonitorEventService;
 import com.ls.utils.RedisUtil;
 import com.ls.utils.StringUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 @Service
+@Slf4j
 public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, MonitorEvent> implements MonitorEventService {
 
-    private static final Logger log = LoggerFactory.getLogger(MonitorEventServiceImpl.class);
+//    private static final Logger log = LoggerFactory.getLogger(MonitorEventServiceImpl.class);
 
     @Autowired
     private RedisUtil redisUtil;
@@ -107,6 +109,9 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
             calendar.add(calendar.DAY_OF_WEEK, -15);
             wrapper.ge("event_date",calendar.getTime());
             wrapper.le("event_date",date);
+
+            //不展示无用信息,只展示有用信息
+            wrapper.eq("is_use",1);
 
         }
         wrapper.orderBy("event_date", false); // 按照时间倒序排序

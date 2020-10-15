@@ -17,6 +17,7 @@ import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,10 @@ import java.util.Locale;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class MonitorBulletinServiceImpl extends ServiceImpl<MonitorBulletinMapper, MonitorBulletin> implements MonitorBulletinService {
 
-    private static final Logger log = LoggerFactory.getLogger(MonitorBulletinServiceImpl.class);
+//    private static final Logger log = LoggerFactory.getLogger(MonitorBulletinServiceImpl.class);
     private static Configuration cfg = new Configuration(Configuration.getVersion());
 
     @Autowired

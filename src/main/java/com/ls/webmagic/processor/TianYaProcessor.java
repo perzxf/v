@@ -28,7 +28,7 @@ import java.util.Random;
 @Slf4j
 public class TianYaProcessor implements PageProcessor {
 
-    private static final Logger log = LoggerFactory.getLogger(TianYaProcessor.class);
+//    private static final Logger log = LoggerFactory.getLogger(TianYaProcessor.class);
 
     /**
      * 解析页面

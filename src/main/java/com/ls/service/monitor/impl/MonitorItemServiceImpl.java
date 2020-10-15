@@ -10,6 +10,7 @@ import com.ls.entity.system.SysUser;
 import com.ls.mapper.monitor.MonitorItemMapper;
 import com.ls.service.monitor.MonitorItemService;
 import com.ls.utils.StringUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,10 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Slf4j
 public class MonitorItemServiceImpl extends ServiceImpl<MonitorItemMapper, MonitorItem> implements MonitorItemService {
 
-    private static final Logger log = LoggerFactory.getLogger(MonitorItemServiceImpl.class);
+//    private static final Logger log = LoggerFactory.getLogger(MonitorItemServiceImpl.class);
 
     @Override
     public void saveMonitorItem(MonitorItem item,HttpSession session) {

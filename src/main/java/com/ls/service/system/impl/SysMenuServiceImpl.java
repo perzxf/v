@@ -10,6 +10,7 @@ import com.ls.service.system.SysMenuService;
 import com.ls.service.system.SysRoleMenuService;
 import com.ls.service.system.SysRoleService;
 import com.ls.service.system.SysUserRoleService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +23,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements SysMenuService {
 
-    private static final Logger log = LoggerFactory.getLogger(SysMenuServiceImpl.class);
+//    private static final Logger log = LoggerFactory.getLogger(SysMenuServiceImpl.class);
 
     @Autowired
     private SysUserRoleService userRoleService;

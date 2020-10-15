@@ -3,6 +3,7 @@ package com.ls.service.spider.impl;
 import com.ls.service.spider.SpiderMonitorService;
 import com.ls.webmagic.MysqlPipeline;
 import com.ls.webmagic.processor.*;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,10 @@ import us.codecraft.webmagic.scheduler.QueueScheduler;
 import java.util.List;
 
 @Service
+@Slf4j
 public class SpiderMonitorServiceImpl implements SpiderMonitorService {
 
-    private static final Logger log = LoggerFactory.getLogger(SpiderMonitorServiceImpl.class);
+//    private static final Logger log = LoggerFactory.getLogger(SpiderMonitorServiceImpl.class);
 
     /**
      *  根据网站类型ID,去区别应该去哪个类里面数据爬取
