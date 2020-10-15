@@ -28,8 +28,6 @@ import java.util.List;
 @Slf4j
 public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, MonitorEvent> implements MonitorEventService {
 
-//    private static final Logger log = LoggerFactory.getLogger(MonitorEventServiceImpl.class);
-
     @Autowired
     private RedisUtil redisUtil;
 
@@ -88,6 +86,33 @@ public class MonitorEventServiceImpl extends ServiceImpl<MonitorEventMapper, Mon
         }
         Integer count = baseMapper.selectCount(wrapper);
         return count;
+    }
+
+    /**
+     * 处理政府留言板数据到数据库
+     * @param liuYanEvent
+     */
+    @Override
+    public void saveLiuYanEvent(List<MonitorEvent> liuYanEvent) {
+        Long redisMonitorId = getRedisMonitor();
+        for (MonitorEvent event:liuYanEvent){
+            event.setMonitorId(redisMonitorId);
+            event.setSiteTypeId(SiteTypeEnum.OTHER.getExpire()); //网站数据类型
+
+            //判断记录是否已存在
+            List<MonitorEvent> list = selectInfo(event);
+            if (CollUtil.isEmpty(list)) {
+                event.setCreateDate(new Date());
+                event.setState(0);
+//                event.setEventType(RandomUtils.randomItem(ConstantConfig.INTS));
+                event.setEventType(0);   //事件类型    暂定默认中性
+                event.setIsUse(1);  //默认数据信息有用
+                baseMapper.insert(event);
+                log.info("保存的信息：{}",event.toString());
+            } else {
+                log.info("记录已存在,记录title:{}",event.getEventTitle());
+            }
+        }
     }
 
     @Override

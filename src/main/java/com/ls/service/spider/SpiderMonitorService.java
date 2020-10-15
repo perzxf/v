@@ -4,4 +4,6 @@ import java.util.List;
 
 public interface SpiderMonitorService {
     void spiderMonitor(Long siteTypeId, String siteUrl, List<String> keyList);
+
+    void getLiuYanInfo();
 }

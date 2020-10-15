@@ -8,66 +8,65 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.model.HttpRequestBody;
+import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.scheduler.BloomFilterDuplicateRemover;
 import us.codecraft.webmagic.scheduler.QueueScheduler;
+import us.codecraft.webmagic.utils.HttpConstant;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
 public class SpiderMonitorServiceImpl implements SpiderMonitorService {
 
-//    private static final Logger log = LoggerFactory.getLogger(SpiderMonitorServiceImpl.class);
-
     /**
      *  根据网站类型ID,去区别应该去哪个类里面数据爬取
-     *  网站类型（1：微博，2：贴吧，3：论坛，4：新闻，5：公众号，6：博客，7：自媒体，8：其他）
+     *  网站类型（[1,'新闻网站', 2,'微博', 3,'贴吧', 4,'论坛', 5,'今日头条',6,'知乎',7,'微信公众号',8,'其他']）
      */
-
 
     @Override
     public void spiderMonitor(Long siteTypeId, String siteUrl, List<String> keyList) {
 
         int  siteType = siteTypeId.intValue();
 
-        /**
-         * [1,'新闻网站', 2,'微博', 3,'贴吧', 4,'论坛', 5,'今日头条',6,'知乎',7,'微信公众号',8,'其他']
-         */
-
         for (String key:keyList){
 
             switch (siteType) {
                 case 1:
-                    System.out.println("新闻网站");
+                    log.info("新闻网站类型");
                     getSinaNewsInfo(siteUrl,key);  //新浪新闻
                     getSouHuNewsInfo(siteUrl,key); //搜狐新闻
                     break;
                 case 2:
-                    System.out.println("微博");
+                    log.info("微博类型");
                     break;
                 case 3:
-                    System.out.println("贴吧");
+                    log.info("贴吧类型");
                     getTieBaInfo(siteUrl,key);
                     break;
                 case 4:
-                    System.out.println("论坛");
+                    log.info("论坛类型");
                     getTianYaInfo(siteUrl,key);
                     break;
                 case 5:
-                    System.out.println("今日头条");
+                    log.info("今日头条类型");
                     getTouTiaoInfo(siteUrl,key);
                     break;
                 case 6:
-                    System.out.println("知乎");
+                    log.info("知乎类型");
                     getZhiHuInfo(siteUrl,key);
                     break;
                 case 7:
-                    System.out.println("微信公众号");
+                    log.info("微信公众号类型");
                     getWeChatInfo(siteUrl,key);
                     break;
                 case 8:
-                    System.out.println("其他");
+                    log.info("其他类型");
                     break;
             }
 
@@ -76,9 +75,32 @@ public class SpiderMonitorServiceImpl implements SpiderMonitorService {
     }
 
 
-
     @Autowired
     private MysqlPipeline mysqlPipeline;
+
+    @Autowired
+    private LiuYanProcessor liuYanProcessor;
+
+    @Override
+    public void getLiuYanInfo() {
+        Map<String,Object> map = new HashMap<>();
+        map.put("fid",1029);
+        map.put("lastItem",0);
+        Request request = new Request();
+        request.setMethod(HttpConstant.Method.POST);
+        request.addHeader("Referer","http://liuyan.people.com.cn/threads/list?fid=1029");
+        request.addHeader("Content-Type", "application/x-www-form-urlencoded");
+        //构造map用于第一条请求的请求体
+        request.setRequestBody(HttpRequestBody.form(map,"utf-8"));
+        request.setUrl("http://liuyan.people.com.cn/threads/queryThreadsList");
+        log.info("开始爬取政府留言板数据");
+        Spider.create(liuYanProcessor)
+                .addRequest(request)
+                .setScheduler(new QueueScheduler().setDuplicateRemover(new BloomFilterDuplicateRemover(100000)))
+                .thread(50)
+                .addPipeline(mysqlPipeline)
+                .run();
+    }
 
     @Autowired
     private WeChatProcessor weChatProcessor;
@@ -97,7 +119,7 @@ public class SpiderMonitorServiceImpl implements SpiderMonitorService {
             builder.append(i);
             String url = builder.toString();
 
-            log.info("开始爬取数据,{}",url);
+            log.info("开始爬取微信公众号数据,{}",url);
             //设置爬虫配置
             Spider.create(weChatProcessor)
                     .addUrl(url) //设置初始爬取的url
@@ -126,7 +148,7 @@ public class SpiderMonitorServiceImpl implements SpiderMonitorService {
             builder.append(i);
             String url = builder.toString();
 
-            log.info("开始爬取数据,{}",url);
+            log.info("开始爬取搜狐新闻数据,{}",url);
             //设置爬虫配置
             Spider.create(souHuNewsProcessor)
                     .addUrl(url) //设置初始爬取的url
@@ -155,7 +177,7 @@ public class SpiderMonitorServiceImpl implements SpiderMonitorService {
             builder.append(i);
             String url = builder.toString();
 
-            log.info("开始爬取数据,{}",url);
+            log.info("开始爬取知乎数据,{}",url);
             //设置爬虫配置
             Spider.create(zhiHuProcessor)
                     .addUrl(url) //设置初始爬取的url
@@ -184,7 +206,7 @@ public class SpiderMonitorServiceImpl implements SpiderMonitorService {
             builder.append(i);
             String url = builder.toString();
 
-            log.info("开始爬取数据,{}",url);
+            log.info("开始爬取百度贴吧数据,{}",url);
             //设置爬虫配置
             Spider.create(tieBaProcessor)
                     .addUrl(url) //设置初始爬取的url
@@ -213,7 +235,7 @@ public class SpiderMonitorServiceImpl implements SpiderMonitorService {
             builder.append(i);
             String url = builder.toString();
 
-            log.info("开始爬取数据,{}",url);
+            log.info("开始爬取天涯论坛数据,{}",url);
             //设置爬虫配置
             Spider.create(tianYaProcessor)
                     .addUrl(url) //设置初始爬取的url
@@ -242,7 +264,7 @@ public class SpiderMonitorServiceImpl implements SpiderMonitorService {
             builder.append(i);
             String url = builder.toString();
 
-            log.info("开始爬取数据,{}",url);
+            log.info("开始爬取新浪新闻数据,{}",url);
             //设置爬虫配置
             Spider.create(sinaNewsProcessor)
                     .addUrl(url) //设置初始爬取的url
@@ -265,7 +287,7 @@ public class SpiderMonitorServiceImpl implements SpiderMonitorService {
      */
     private void getTouTiaoInfo(String siteUrl, String key) {
         siteUrl = "https://www.toutiao.com/search/?keyword="+key;
-        log.info("开始爬取数据,{}",siteUrl);
+        log.info("开始爬取今日头条数据,{}",siteUrl);
         //设置爬虫配置
         Spider.create(touTiaoProcessor)
                 .addUrl(siteUrl) //设置初始爬取的url

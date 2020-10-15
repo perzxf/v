@@ -28,9 +28,6 @@ import java.util.Random;
 @Slf4j
 public class WeChatProcessor implements PageProcessor {
 
-//    private static final Logger log = LoggerFactory.getLogger(WeChatProcessor.class);
-
-
     /**
      * 解析页面
      * @param page

@@ -34,4 +34,6 @@ public interface MonitorEventService extends IService<MonitorEvent> {
     Integer getEventCount(String eventDate);
 
     Integer getPieEventCount(Long monitorId, Long siteTypeId);
+
+    void saveLiuYanEvent(List<MonitorEvent> liuYanEvent);
 }

@@ -30,8 +30,6 @@ import java.util.*;
 @Slf4j
 public class SpiderController {
 
-//    private static final Logger log = LoggerFactory.getLogger(SpiderController.class);
-
     /**
      * 页面有一个开启按钮，进来之后携带（项目ID）
      * 首先，关键词拆分,根据规定是逗号隔开,在代码中根据逗号分割，每一个关键词和项目名称都组成一个keys,
@@ -97,6 +95,7 @@ public class SpiderController {
     }
 
 
+
     /**
      * 定时开启监测   0 0 0/1 * * ?   每小时执行一次
      * 先获取项目list  查看每一个项目的创建人
@@ -153,4 +152,40 @@ public class SpiderController {
             }
         }
     }
+
+
+    /**
+     * 政府留言板  定时监测   每天8点、14点、18点、22点
+     */
+    @Scheduled(cron = "0 0 8,14,18,22 * * ?")
+    public void monitorGovernmentMessage(){
+        //获取项目
+        Wrapper<MonitorItem> wrapper = new EntityWrapper<>();
+        List<MonitorItem> items = itemService.selectList(wrapper);
+        for (MonitorItem item:items){
+            //查看用户
+            SysUser user = userService.getByUserId(item.getUserId());
+            //判断用户的可实用性
+            if (user.getIsOff() == ConstantConfig.ISOFF){
+                if(user.getEndDate().getTime() >= new Date().getTime()){
+                    String redisKey = RedisCacheKey.MONITOR.getType();
+                    redisUtil.set(redisKey,item.getMonitorId(),30*60);
+
+                    spiderMonitorService.getLiuYanInfo();
+                    log.info("{}:开启监测成功",item.getMonitorName());
+
+                }else{
+                    log.info("该用户服务时间已到期");
+                    SysUser sysUser = new SysUser();
+                    sysUser.setUserId(user.getUserId());
+                    sysUser.setIsOff(ConstantConfig.NOOFF);
+                    userService.updateById(sysUser);
+                }
+            }else{
+                log.info("用户被封禁");
+            }
+        }
+    }
+
+
 }
