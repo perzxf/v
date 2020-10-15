@@ -2,6 +2,7 @@ package com.ls.controller.system;
 
 import com.ls.common.ConstantConfig;
 import com.ls.entity.system.SysUser;
+import com.ls.service.system.SysUserRoleService;
 import com.ls.service.system.SysUserService;
 import com.ls.utils.Md5Util;
 import com.ls.utils.StringUtil;
@@ -24,6 +25,8 @@ public class SysUserController {
 
     @Autowired
     private SysUserService userService;
+    @Autowired
+    private SysUserRoleService userRoleService;
 
     /**
      * 修改密码
@@ -90,6 +93,7 @@ public class SysUserController {
         Map<String, Object> delMap = new HashMap<>();
         delMap.put("user_id",userId);
         boolean bool = userService.deleteByMap(delMap);
+        userRoleService.deleteByMap(delMap);
         map.put("success",bool);
         return map;
     }

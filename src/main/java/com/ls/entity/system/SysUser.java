@@ -86,4 +86,7 @@ public class SysUser {
      */
     private String  remark;
 
+
+    private transient String roleId;
+
 }

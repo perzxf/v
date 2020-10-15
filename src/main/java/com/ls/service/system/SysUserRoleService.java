@@ -10,4 +10,6 @@ public interface SysUserRoleService extends IService<SysUserRole> {
      *
      */
     List<SysUserRole> selectListByUserId(Long userId);
+
+    void saveUserRole(Long userId, String roleId);
 }

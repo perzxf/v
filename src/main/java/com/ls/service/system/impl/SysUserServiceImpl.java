@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.ls.common.ConstantConfig;
 import com.ls.entity.system.SysUser;
 import com.ls.mapper.system.SysUserMapper;
+import com.ls.service.system.SysUserRoleService;
 import com.ls.service.system.SysUserService;
 import com.ls.utils.Md5Util;
 import com.ls.utils.StringUtil;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -24,8 +26,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
-
-//    private static final Logger log = LoggerFactory.getLogger(SysUserServiceImpl.class);
 
     @Override
     public SysUser findByUserName(String userName) {
@@ -54,11 +54,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return sysUser;
     }
 
+    @Autowired
+    private SysUserRoleService userRoleService;
+
     @Override
     public void saveUser(SysUser user) {
         user = createByUser(user);
-        baseMapper.insert(user);
+        Integer userId = baseMapper.insert(user);
         log.info("保存的用户信息：{}",user.toString());
+        //新增用户角色
+        userRoleService.saveUserRole(user.getUserId(),user.getRoleId());
     }
 
     /**
