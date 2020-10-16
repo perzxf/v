@@ -68,20 +68,22 @@ public class MysqlPipeline implements Pipeline {
 
         List<MonitorEvent> liuYanEvent = new ArrayList<>();
 
-        for (int i = 0 ; i<10 ; i++) {
-            MonitorEvent event = new MonitorEvent();
-            String url = "http://liuyan.people.com.cn/threads/content?tid="+tid_list.get(i);
-            event.setEventUrl(url);
-            event.setEventTitle(subject_list.get(i));
-            try {
-                Date date = DateUtil.formatTimeStampToDate(time_list.get(i), "yyyy-MM-dd HH:mm:ss");
-                event.setEventDate(date);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            event.setEventContent(content_list.get(i));
+        if (tid_list != null){
+            for (int i = 0 ; i<10 ; i++) {
+                MonitorEvent event = new MonitorEvent();
+                String url = "http://liuyan.people.com.cn/threads/content?tid="+tid_list.get(i);
+                event.setEventUrl(url);
+                event.setEventTitle(subject_list.get(i));
+                try {
+                    Date date = DateUtil.formatTimeStampToDate(time_list.get(i), "yyyy-MM-dd HH:mm:ss");
+                    event.setEventDate(date);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                event.setEventContent(content_list.get(i));
 
-            liuYanEvent.add(event);
+                liuYanEvent.add(event);
+            }
         }
 
         if (liuYanEvent != null) {

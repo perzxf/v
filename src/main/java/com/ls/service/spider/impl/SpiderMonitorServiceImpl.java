@@ -55,7 +55,7 @@ public class SpiderMonitorServiceImpl implements SpiderMonitorService {
                     break;
                 case 5:
                     log.info("今日头条类型");
-                    getTouTiaoInfo(siteUrl,key);
+//                    getTouTiaoInfo(siteUrl,key);
                     break;
                 case 6:
                     log.info("知乎类型");

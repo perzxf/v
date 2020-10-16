@@ -26,8 +26,6 @@ import java.util.Random;
 @Slf4j
 public class TouTiaoProcessor implements PageProcessor {
 
-//    private static final Logger log = LoggerFactory.getLogger(TouTiaoProcessor.class);
-
     /**
      * 解析页面
      * @param page
@@ -88,7 +86,7 @@ public class TouTiaoProcessor implements PageProcessor {
     //配置爬虫信息
     private Site site = Site.me()
             .setUserAgent(this.userAgent)
-            .setCharset("utf8")
+//            .setCharset("utf8")
             .setTimeOut(10 * 1000)
             .setRetryTimes(3)
             .setRetrySleepTime(3000);

@@ -28,8 +28,6 @@ import java.util.Random;
 @Slf4j
 public class SinaNewsProcessor implements PageProcessor {
 
-//    private static final Logger log = LoggerFactory.getLogger(SinaNewsProcessor.class);
-
     /**
      * 解析页面
      * @param page
@@ -37,7 +35,7 @@ public class SinaNewsProcessor implements PageProcessor {
     @Override
     public void process(Page page) {
         //解析列表页
-        List<Selectable> nodes = page.getHtml().css("div.results div.box-result").nodes();
+        List<Selectable> nodes = page.getHtml().css("div.result div.box-result").nodes();
 
         if (CollUtil.isNotEmpty(nodes)) {
             //不为空表示这是数据详情页,解析页面,获取详情信息,保存数据
@@ -57,7 +55,7 @@ public class SinaNewsProcessor implements PageProcessor {
         List<MonitorEvent> infoList = new ArrayList<>();
         //解析页面
         Html html = page.getHtml();
-        List<Selectable> nodes = html.css("div.results div.box-result").nodes();
+        List<Selectable> nodes = html.css("div.result div.box-result").nodes();
         for (Selectable node : nodes) {
             String title = node.xpath("//div[@class='box-result']/h2/a/allText()").toString();  //标题
             String content = node.xpath("//div[@class='r-info']/p/allText()").toString(); //内容
